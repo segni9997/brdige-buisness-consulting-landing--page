@@ -1,4 +1,3 @@
-import React from 'react';
 import { TrendingUp, Users, DollarSign, Clock, ArrowRight } from 'lucide-react';
 
 const Projects = () => {
