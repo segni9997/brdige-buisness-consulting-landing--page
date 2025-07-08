@@ -1,32 +1,32 @@
-import { Award, Clock, Globe, Users } from 'lucide-react';
+// import { Award, Clock, Globe, Users } from 'lucide-react';
 
 const About = () => {
-  const achievements = [
-    {
-      icon: <Award className="h-8 w-8" />,
-      title: 'Industry Recognition',
-      description: 'Awarded "Best Consulting Firm" by Business Excellence Awards for 3 consecutive years.',
-      gradient: 'from-yellow-500 to-orange-600'
-    },
-    {
-      icon: <Clock className="h-8 w-8" />,
-      title: '15+ Years Experience',
-      description: 'Over a decade of proven track record in delivering transformational business solutions.',
-      gradient: 'from-blue-500 to-indigo-600'
-    },
-    {
-      icon: <Globe className="h-8 w-8" />,
-      title: 'Global Reach',
-      description: 'Serving clients across 25+ countries with localized expertise and global best practices.',
-      gradient: 'from-green-500 to-teal-600'
-    },
-    {
-      icon: <Users className="h-8 w-8" />,
-      title: 'Expert Team',
-      description: 'A diverse team of 50+ consultants with expertise across multiple industries and domains.',
-      gradient: 'from-purple-500 to-pink-600'
-    }
-  ];
+  // const achievements = [
+  //   {
+  //     icon: <Award className="h-8 w-8" />,
+  //     title: 'Industry Recognition',
+  //     description: 'Awarded "Best Consulting Firm" by Business Excellence Awards for 3 consecutive years.',
+  //     gradient: 'from-yellow-500 to-orange-600'
+  //   },
+  //   {
+  //     icon: <Clock className="h-8 w-8" />,
+  //     title: '15+ Years Experience',
+  //     description: 'Over a decade of proven track record in delivering transformational business solutions.',
+  //     gradient: 'from-blue-500 to-indigo-600'
+  //   },
+  //   {
+  //     icon: <Globe className="h-8 w-8" />,
+  //     title: 'Global Reach',
+  //     description: 'Serving clients across 25+ countries with localized expertise and global best practices.',
+  //     gradient: 'from-green-500 to-teal-600'
+  //   },
+  //   {
+  //     icon: <Users className="h-8 w-8" />,
+  //     title: 'Expert Team',
+  //     description: 'A diverse team of 50+ consultants with expertise across multiple industries and domains.',
+  //     gradient: 'from-purple-500 to-pink-600'
+  //   }
+  // ];
 
   return (
     <section id="about" className="py-20 relative overflow-hidden">
