@@ -73,7 +73,7 @@ const Projects = () => {
       
       {/* Animated Background Elements */}
       <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute top-20 left-10 w-32 h-32 bg-blue-500/10 rounded-full blur-2xl animate-float"></div>
+        <div className="absolute top-20 left-10 w-32 h-32 bg-blue-200/10 rounded-full blur-2xl animate-float"></div>
         <div className="absolute bottom-20 right-10 w-40 h-40 bg-orange-500/10 rounded-full blur-2xl animate-float-delayed"></div>
         <div className="absolute top-1/2 left-1/3 w-24 h-24 bg-green-500/10 rounded-full blur-2xl animate-pulse"></div>
       </div>

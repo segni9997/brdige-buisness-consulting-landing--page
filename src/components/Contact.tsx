@@ -34,7 +34,7 @@ const Contact = () => {
           backgroundImage: 'url(https://images.pexels.com/photos/3184465/pexels-photo-3184465.jpeg?auto=compress&cs=tinysrgb&w=1920)'
         }}
       ></div>
-      <div className="absolute inset-0 bg-gradient-to-br from-gray-50 to-white"></div>
+      <div className="absolute inset-0  bg-gradient-to-br from-gray-900 via-gray-800 to-black"></div>
       
       {/* Animated Background Elements */}
       <div className="absolute inset-0 overflow-hidden">
@@ -44,10 +44,10 @@ const Contact = () => {
       
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4 animate-fade-in-up">
+          <h2 className="text-4xl md:text-5xl font-bold text-gray-200 mb-4 animate-fade-in-up">
             Get In Touch
           </h2>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto animate-fade-in-up delay-200">
+          <p className="text-xl text-gray-300 max-w-3xl mx-auto animate-fade-in-up delay-200">
             Ready to transform your business? Contact us today for a free consultation 
             and discover how we can help you achieve your goals.
           </p>
@@ -55,7 +55,7 @@ const Contact = () => {
         
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
           <div className="animate-fade-in-left">
-            <h3 className="text-2xl font-semibold text-gray-900 mb-6">
+            <h3 className="text-2xl font-semibold text-gray-200 mb-6">
               Let's Start a Conversation
             </h3>
             
@@ -88,24 +88,24 @@ const Contact = () => {
                     {contact.icon}
                   </div>
                   <div>
-                    <h4 className="font-semibold text-gray-900 mb-1 group-hover:text-red-600 transition-colors duration-300">{contact.title}</h4>
-                    <p className="text-gray-600 font-medium">{contact.info}</p>
-                    <p className="text-sm text-gray-500">{contact.subInfo}</p>
+                    <h4 className="font-semibold text-gray-200 mb-1 group-hover:text-red-600 transition-colors duration-300">{contact.title}</h4>
+                    <p className="text-gray-300 font-medium">{contact.info}</p>
+                    <p className="text-sm text-gray-400">{contact.subInfo}</p>
                   </div>
                 </div>
               ))}
             </div>
             
             <div 
-              className="mt-8 p-6 bg-gradient-to-r from-red-50 to-blue-50 rounded-lg border border-red-100 group hover:shadow-lg transition-all duration-300"
+              className="mt-8 p-6 bg-gradient-to-r from-gray-700 to-gray-700 rounded-lg border group hover:shadow-lg transition-all duration-300"
               style={{
                 clipPath: 'polygon(0 0, calc(100% - 15px) 0, 100% 15px, 100% 100%, 15px 100%, 0 calc(100% - 15px))'
               }}
             >
-              <h4 className="font-semibold text-gray-900 mb-3 group-hover:text-red-600 transition-colors duration-300">
+              <h4 className="font-semibold text-gray-200 mb-3 group-hover:text-red-600 transition-colors duration-300">
                 Schedule a Free Consultation
               </h4>
-              <p className="text-gray-600 mb-4">
+              <p className="text-gray-300 mb-4">
                 Book a 30-minute discovery call to discuss your business challenges and explore how we can help.
               </p>
               <button className="bg-gradient-to-r from-red-600 to-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:from-red-700 hover:to-blue-700 transition-all duration-300 transform hover:scale-105 hover:shadow-lg">
@@ -115,14 +115,14 @@ const Contact = () => {
           </div>
           
           <div 
-            className="bg-white p-8 rounded-xl shadow-lg border border-gray-100 animate-fade-in-right hover:shadow-2xl transition-all duration-500"
+            className="bg-gray-800 p-8 rounded-xl shadow-lg border border-red-300 animate-fade-in-right hover:shadow-2xl transition-all duration-500"
             style={{
               clipPath: 'polygon(0 0, calc(100% - 20px) 0, 100% 20px, 100% calc(100% - 20px), calc(100% - 20px) 100%, 0 100%)'
             }}
           >
             <form onSubmit={handleSubmit} className="space-y-6">
               <div className="group">
-                <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2 group-focus-within:text-red-600 transition-colors duration-200">
+                <label htmlFor="name" className="block text-sm font-medium text-gray-200 mb-2 group-focus-within:text-red-600 transition-colors duration-200">
                   Full Name *
                 </label>
                 <input
@@ -138,7 +138,7 @@ const Contact = () => {
               </div>
               
               <div className="group">
-                <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2 group-focus-within:text-red-600 transition-colors duration-200">
+                <label htmlFor="email" className="block text-sm font-medium text-gray-200 mb-2 group-focus-within:text-red-600 transition-colors duration-200">
                   Email Address *
                 </label>
                 <input
@@ -154,7 +154,7 @@ const Contact = () => {
               </div>
               
               <div className="group">
-                <label htmlFor="company" className="block text-sm font-medium text-gray-700 mb-2 group-focus-within:text-red-600 transition-colors duration-200">
+                <label htmlFor="company" className="block text-sm font-medium text-gray-200 mb-2 group-focus-within:text-red-600 transition-colors duration-200">
                   Company Name
                 </label>
                 <input
@@ -169,7 +169,7 @@ const Contact = () => {
               </div>
               
               <div className="group">
-                <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-2 group-focus-within:text-red-600 transition-colors duration-200">
+                <label htmlFor="message" className="block text-sm font-medium text-gray-200 mb-2 group-focus-within:text-red-600 transition-colors duration-200">
                   Message *
                 </label>
                 <textarea

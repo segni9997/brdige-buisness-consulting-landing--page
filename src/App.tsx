@@ -3,7 +3,7 @@ import Hero from './components/Hero';
 import Services from './components/Services';
 import About from './components/About';
 import Projects from './components/Projects';
-import Team from './components/Team';
+// import Team from './components/Team';
 import Testimonials from './components/Testimonials';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
@@ -16,7 +16,7 @@ function App() {
       <Services />
       <About />
       <Projects />
-      <Team />
+      {/* <Team /> */}
       <Testimonials />
       <Contact />
       <Footer />

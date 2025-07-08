@@ -55,14 +55,14 @@ const Services = () => {
           backgroundImage: 'url(https://images.pexels.com/photos/3184465/pexels-photo-3184465.jpeg?auto=compress&cs=tinysrgb&w=1920)'
         }}
       ></div>
-      <div className="absolute inset-0 bg-gradient-to-br from-gray-50 to-white"></div>
+      <div className="absolute inset-0  bg-gradient-to-br from-gray-900 via-gray-800 to-black"></div>
       
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4 animate-fade-in-up">
+          <h2 className="text-4xl md:text-5xl font-bold text-gray-100 mb-4 animate-fade-in-up">
             Our Services
           </h2>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto animate-fade-in-up delay-200">
+          <p className="text-xl text-gray-200 max-w-3xl mx-auto animate-fade-in-up delay-200">
             We offer comprehensive consulting services designed to address your unique business challenges and unlock new opportunities for growth.
           </p>
         </div>
@@ -71,7 +71,7 @@ const Services = () => {
           {services.map((service, index) => (
             <div
               key={index}
-              className="group relative bg-white rounded-xl shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-4 animate-fade-in-up"
+              className="group relative bg-gray-700 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-4 animate-fade-in-up"
               style={{
                 animationDelay: `${index * 100}ms`,
                 clipPath: 'polygon(0 0, 100% 0, 100% 85%, 85% 100%, 0 100%)'
@@ -88,17 +88,17 @@ const Services = () => {
                   {service.icon}
                 </div>
                 
-                <h3 className="text-xl font-semibold text-gray-900 mb-4 group-hover:text-blue-600 transition-colors duration-300">
+                <h3 className="text-xl font-semibold text-gray-200 mb-4 group-hover:text-blue-200 transition-colors duration-300">
                   {service.title}
                 </h3>
                 
-                <p className="text-gray-600 mb-6 leading-relaxed">
+                <p className="text-gray-400 mb-6 leading-relaxed">
                   {service.description}
                 </p>
                 
                 <ul className="space-y-3 mb-6">
                   {service.features.map((feature, featureIndex) => (
-                    <li key={featureIndex} className="flex items-center text-sm text-gray-500 group-hover:text-gray-700 transition-colors duration-300">
+                    <li key={featureIndex} className="flex items-center text-sm text-gray-400 group-hover:text-gray-200 transition-colors duration-300">
                       <div className={`w-2 h-2 bg-gradient-to-r ${service.gradient} rounded-full mr-3 animate-pulse`}></div>
                       {feature}
                     </li>

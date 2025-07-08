@@ -49,7 +49,7 @@ const Testimonials = () => {
           backgroundImage: 'url(https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg?auto=compress&cs=tinysrgb&w=1920)'
         }}
       ></div>
-      <div className="absolute inset-0 bg-gradient-to-br from-white to-gray-50"></div>
+      <div className="absolute inset-0 bg-gradient-to-br from-gray-900 via-gray-800 to-black"></div>
       
       {/* Animated Background Elements */}
       <div className="absolute inset-0 overflow-hidden">
@@ -60,10 +60,10 @@ const Testimonials = () => {
       
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4 animate-fade-in-up">
+          <h2 className="text-4xl md:text-5xl font-bold text-gray-200 mb-4 animate-fade-in-up">
             What Our Clients Say
           </h2>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto animate-fade-in-up delay-200">
+          <p className="text-xl text-gray-300 max-w-3xl mx-auto animate-fade-in-up delay-200">
             Don't just take our word for it. Here's what industry leaders say about their 
             experience working with Bridge Management Consultancy Services.
           </p>
@@ -73,7 +73,7 @@ const Testimonials = () => {
           {testimonials.map((testimonial, index) => (
             <div
               key={index}
-              className="group relative bg-white p-8 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-3 animate-fade-in-up border border-gray-100"
+              className="group relative bg-gray-800 p-8 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-3 animate-fade-in-up border border-gray-100"
               style={{
                 animationDelay: `${index * 150}ms`,
                 clipPath: 'polygon(0 0, calc(100% - 25px) 0, 100% 25px, 100% 100%, 25px 100%, 0 calc(100% - 25px))'
@@ -98,7 +98,7 @@ const Testimonials = () => {
                 </div>
                 
                 {/* Testimonial Text */}
-                <p className="text-gray-700 mb-6 italic text-lg leading-relaxed group-hover:text-gray-800 transition-colors duration-300">
+                <p className="text-gray-300 mb-6 italic text-lg leading-relaxed group-hover:text-gray-400 transition-colors duration-300">
                   "{testimonial.testimonial}"
                 </p>
                 
@@ -113,10 +113,10 @@ const Testimonials = () => {
                     <div className={`absolute inset-0 rounded-full bg-gradient-to-r ${testimonial.gradient} opacity-0 group-hover:opacity-20 transition-opacity duration-300`}></div>
                   </div>
                   <div>
-                    <h4 className="font-semibold text-gray-900 group-hover:text-red-600 transition-colors duration-300">
+                    <h4 className="font-semibold text-gray-300 group-hover:text-red-600 transition-colors duration-300">
                       {testimonial.name}
                     </h4>
-                    <p className="text-sm text-gray-600 group-hover:text-gray-700 transition-colors duration-300">
+                    <p className="text-sm text-gray-400 group-hover:text-gray-700 transition-colors duration-300">
                       {testimonial.role}
                     </p>
                     <p className="text-xs text-gray-500">

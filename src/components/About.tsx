@@ -37,7 +37,7 @@ const About = () => {
           backgroundImage: 'url(https://images.pexels.com/photos/3184339/pexels-photo-3184339.jpeg?auto=compress&cs=tinysrgb&w=1920)'
         }}
       ></div>
-      <div className="absolute inset-0 bg-gradient-to-br from-white to-gray-50"></div>
+      <div className="absolute inset-0 bg-gradient-to-br from-gray-900 via-gray-800 to-black"></div>
       
       {/* Animated Background Elements */}
       <div className="absolute inset-0 overflow-hidden">
@@ -46,27 +46,27 @@ const About = () => {
       </div>
       
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+        <div className="gap-16 items-center max-w-6xl">
           <div className="animate-fade-in-left">
-            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
+            <h2 className="text-4xl md:text-5xl text-center font-bold text-gray-200 mb-6">
               About Bridge
             </h2>
             
-            <p className="text-lg text-gray-600 mb-8 leading-relaxed">
+            <p className="text-lg text-gray-200 mb-8 leading-relaxed">
               Founded in 2008, Bridge Management Consultancy Services has been at the forefront of business transformation, 
               helping organizations navigate complex challenges and unlock their full potential. 
               Our approach combines deep industry knowledge with innovative methodologies to deliver 
               sustainable results.
             </p>
             
-            <div className="space-y-6">
-              <div className="flex items-start space-x-4 group">
+            <div className="space-y-6 items-center mx-auto flex justify-center flex-col  w-[60%] ">
+              <div className="flex space-x-4 group">
                 <div className="flex-shrink-0 w-8 h-8 bg-gradient-to-r from-red-600 to-blue-600 rounded-full flex items-center justify-center mt-1 group-hover:scale-110 transition-transform duration-300">
                   <div className="w-3 h-3 bg-white rounded-full"></div>
                 </div>
                 <div>
-                  <h3 className="font-semibold text-gray-900 mb-2 group-hover:text-red-600 transition-colors duration-300">Our Mission</h3>
-                  <p className="text-gray-600 leading-relaxed">
+                  <h3 className="font-semibold text-gray-300 mb-2 group-hover:text-red-600 transition-colors duration-300">Our Mission</h3>
+                  <p className="text-gray-400 leading-relaxed">
                     To empower businesses with strategic insights and practical solutions that drive 
                     measurable growth and lasting competitive advantage.
                   </p>
@@ -78,8 +78,8 @@ const About = () => {
                   <div className="w-3 h-3 bg-white rounded-full"></div>
                 </div>
                 <div>
-                  <h3 className="font-semibold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors duration-300">Our Vision</h3>
-                  <p className="text-gray-600 leading-relaxed">
+                  <h3 className="font-semibold text-gray-300 mb-2 group-hover:text-blue-400 transition-colors duration-300">Our Vision</h3>
+                  <p className="text-gray-400 leading-relaxed">
                     To be the trusted partner for organizations seeking to transform their operations 
                     and achieve breakthrough performance in an ever-evolving business landscape.
                   </p>
@@ -88,37 +88,7 @@ const About = () => {
             </div>
           </div>
           
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 animate-fade-in-right">
-            {achievements.map((achievement, index) => (
-              <div
-                key={index}
-                className="group relative bg-white p-6 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-3 animate-fade-in-up border border-gray-100"
-                style={{
-                  animationDelay: `${index * 150}ms`,
-                  clipPath: 'polygon(0 0, calc(100% - 15px) 0, 100% 15px, 100% 100%, 15px 100%, 0 calc(100% - 15px))'
-                }}
-              >
-                {/* Gradient Background */}
-                <div className={`absolute inset-0 bg-gradient-to-br ${achievement.gradient} opacity-0 group-hover:opacity-5 transition-opacity duration-500 rounded-xl`}></div>
-                
-                <div className="relative z-10">
-                  <div className={`text-white mb-4 w-16 h-16 rounded-full bg-gradient-to-br ${achievement.gradient} flex items-center justify-center group-hover:scale-110 group-hover:rotate-12 transition-all duration-500 shadow-lg`}>
-                    {achievement.icon}
-                  </div>
-                  <h3 className="font-semibold text-gray-900 mb-2 group-hover:text-red-600 transition-colors duration-300">
-                    {achievement.title}
-                  </h3>
-                  <p className="text-sm text-gray-600 leading-relaxed">
-                    {achievement.description}
-                  </p>
-                </div>
-                
-                {/* Corner Accent */}
-                <div className={`absolute top-0 right-0 w-12 h-12 bg-gradient-to-bl ${achievement.gradient} opacity-10 group-hover:opacity-20 transition-opacity duration-500`}
-                     style={{ clipPath: 'polygon(100% 0, 100% 70%, 30% 100%, 0 0)' }}></div>
-              </div>
-            ))}
-          </div>
+        
         </div>
         
         <div className="mt-16 relative animate-fade-in-up delay-500">

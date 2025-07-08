@@ -17,7 +17,7 @@ const Hero = () => {
           backgroundImage: 'url(https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg?auto=compress&cs=tinysrgb&w=1920)'
         }}
       ></div>
-      <div className="absolute inset-0 bg-gradient-to-br from-blue-900/90 via-blue-800/85 to-blue-700/90"></div>
+      <div className="absolute inset-0 bg-gradient-to-br from-gray-900/90 via-gray-800/85 to-gray-700/90"></div>
       <div className="absolute inset-0 bg-black/30"></div>
       
       {/* Animated Background Elements */}
