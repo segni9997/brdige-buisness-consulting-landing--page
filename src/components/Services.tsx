@@ -1,122 +1,167 @@
+import { motion, useInView } from 'framer-motion';
+import { useRef } from 'react';
 import { BarChart3, Target, Users, Zap, TrendingUp, Shield } from 'lucide-react';
 
 const Services = () => {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: "-100px" });
+
   const services = [
     {
       icon: <BarChart3 className="h-8 w-8" />,
       title: 'Strategic Planning',
       description: 'Develop comprehensive strategies that align with your business goals and market opportunities.',
       features: ['Market Analysis', 'Growth Strategy', 'Risk Assessment', 'Performance Metrics'],
-      gradient: 'from-blue-500 to-purple-600'
+      gradient: 'from-black/60 to-black/80'
     },
     {
       icon: <Target className="h-8 w-8" />,
       title: 'Operations Optimization',
       description: 'Streamline your operations to improve efficiency, reduce costs, and enhance productivity.',
       features: ['Process Mapping', 'Workflow Automation', 'Quality Management', 'Cost Reduction'],
-      gradient: 'from-green-500 to-teal-600'
+      gradient: 'from-accent-500 to-accent-600'
     },
     {
       icon: <Users className="h-8 w-8" />,
       title: 'Organizational Development',
       description: 'Build high-performing teams and create a culture that drives sustainable success.',
       features: ['Leadership Development', 'Team Building', 'Change Management', 'Culture Transformation'],
-      gradient: 'from-orange-500 to-red-600'
+      gradient: 'from-accent-500 to-accent-700'
     },
     {
       icon: <Zap className="h-8 w-8" />,
       title: 'Digital Transformation',
       description: 'Leverage technology to modernize your business processes and stay competitive.',
       features: ['Technology Integration', 'Digital Strategy', 'Data Analytics', 'Innovation Lab'],
-      gradient: 'from-yellow-500 to-orange-600'
+      gradient: 'from-black/40 to-black/60'
     },
     {
       icon: <TrendingUp className="h-8 w-8" />,
       title: 'Financial Advisory',
       description: 'Optimize your financial performance with expert guidance on budgeting and forecasting.',
       features: ['Financial Planning', 'Investment Strategy', 'Cash Flow Management', 'M&A Advisory'],
-      gradient: 'from-indigo-500 to-blue-600'
+      gradient: 'from-primary-600 to-accent-500'
     },
     {
       icon: <Shield className="h-8 w-8" />,
       title: 'Risk Management',
       description: 'Identify, assess, and mitigate business risks to protect your organization.',
       features: ['Risk Assessment', 'Compliance', 'Crisis Management', 'Insurance Strategy'],
-      gradient: 'from-pink-500 to-rose-600'
+      gradient: 'from-primary-700 to-primary-900'
     }
   ];
 
   return (
-    <section id="services" className="py-20 relative overflow-hidden">
-      {/* Background Image with Overlay */}
-      <div 
-        className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-5"
-        style={{
-          backgroundImage: 'url(https://images.pexels.com/photos/3184465/pexels-photo-3184465.jpeg?auto=compress&cs=tinysrgb&w=1920)'
-        }}
-      ></div>
-      <div className="absolute inset-0  bg-gradient-to-br from-gray-900 via-gray-800 to-black"></div>
+    <section id="services" className="py-16 md:py-24 relative overflow-hidden bg-black/80">
+      <div className="absolute inset-0 opacity-5">
+        <div className="absolute top-0 left-0 w-full h-full" style={{
+          backgroundImage: `radial-gradient(circle at 2px 2px, rgba(255,193,7,0.1) 1px, transparent 0)`,
+          backgroundSize: '40px 40px'
+        }}></div>
+      </div>
+      
+      <motion.div 
+        className="absolute inset-0 overflow-hidden"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 1 }}
+      >
+        <motion.div 
+          className="absolute top-10 md:top-20 right-10 md:right-20 w-40 md:w-56 h-40 md:h-56 bg-accent-500/10 rounded-full blur-3xl"
+          animate={{ scale: [1, 1.2, 1], x: [0, 30, 0] }}
+          transition={{ duration: 7, repeat: Infinity }}
+        />
+        <motion.div 
+          className="absolute bottom-10 md:bottom-20 left-10 md:left-20 w-48 md:w-72 h-48 md:h-72 bg-white/10 rounded-full blur-3xl"
+          animate={{ scale: [1, 1.1, 1], x: [0, -20, 0] }}
+          transition={{ duration: 9, repeat: Infinity, delay: 2 }}
+        />
+      </motion.div>
       
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-bold text-gray-100 mb-4 animate-fade-in-up">
+        <motion.div 
+          className="text-center mb-12 md:mb-16"
+          initial={{ opacity: 0, y: 30 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.6 }}
+        >
+          <motion.span 
+            className="inline-block px-3 md:px-4 py-1.5 bg-accent-500/20 text-accent-400 rounded-full text-sm font-medium mb-4"
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={isInView ? { opacity: 1, scale: 1 } : {}}
+            transition={{ delay: 0.2, duration: 0.4 }}
+          >
+            What We Offer
+          </motion.span>
+          <h2 className="text-3xl md:text-4xl md:text-5xl font-bold text-white mb-4" style={{ fontFamily: 'var(--font-heading)' }}>
             Our Services
           </h2>
-          <p className="text-xl text-gray-200 max-w-3xl mx-auto animate-fade-in-up delay-200">
+          <p className="text-lg md:text-xl text-white/80 max-w-3xl mx-auto">
             We offer comprehensive consulting services designed to address your unique business challenges and unlock new opportunities for growth.
           </p>
-        </div>
+        </motion.div>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8" ref={ref}>
           {services.map((service, index) => (
-            <div
+            <motion.div
               key={index}
-              className="group relative bg-gray-700 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-4 animate-fade-in-up"
-              style={{
-                animationDelay: `${index * 100}ms`,
-                clipPath: 'polygon(0 0, 100% 0, 100% 85%, 85% 100%, 0 100%)'
-              }}
+              className="group relative bg-black/50 backdrop-blur-sm rounded-2xl p-8 border border-white/20 hover:border-accent-500/30 transition-all duration-500"
+              initial={{ opacity: 0, y: 50 }}
+              animate={isInView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.6, delay: index * 0.1 }}
+              whileHover={{ y: -16 }}
             >
-              {/* Gradient Background */}
-              <div className={`absolute inset-0 bg-gradient-to-br ${service.gradient} opacity-0 group-hover:opacity-10 transition-opacity duration-500 rounded-xl`}></div>
+              <div className={`absolute inset-0 bg-gradient-to-br ${service.gradient} opacity-0 group-hover:opacity-10 transition-opacity duration-500 rounded-2xl`}></div>
               
-              {/* Animated Border */}
-              <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-transparent via-blue-500/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 animate-border-flow"></div>
-              
-              <div className="relative p-8 z-10">
-                <div className={`text-white mb-6 w-16 h-16 rounded-full bg-gradient-to-br ${service.gradient} flex items-center justify-center group-hover:scale-110 group-hover:rotate-12 transition-all duration-500 shadow-lg`}>
+              <motion.div className="relative p-6 md:p-8 z-10">
+                <motion.div 
+                  className={`text-white mb-4 md:mb-6 w-12 md:w-16 h-12 md:h-16 rounded-xl bg-gradient-to-br ${service.gradient} flex items-center justify-center shadow-lg`}
+                  whileHover={{ scale: 1.1, rotate: 12 }}
+                  transition={{ type: "spring", stiffness: 300 }}
+                >
                   {service.icon}
-                </div>
+                </motion.div>
                 
-                <h3 className="text-xl font-semibold text-gray-200 mb-4 group-hover:text-blue-200 transition-colors duration-300">
+                <h3 className="text-lg md:text-xl font-semibold text-white mb-3 md:mb-4 group-hover:text-accent-400 transition-colors duration-300" style={{ fontFamily: 'var(--font-heading)' }}>
                   {service.title}
                 </h3>
                 
-                <p className="text-gray-400 mb-6 leading-relaxed">
+                <p className="text-white/80 mb-4 md:mb-6 leading-relaxed text-sm md:text-base">
                   {service.description}
                 </p>
                 
-                <ul className="space-y-3 mb-6">
+                <ul className="space-y-2 md:space-y-3 mb-4 md:mb-6">
                   {service.features.map((feature, featureIndex) => (
-                    <li key={featureIndex} className="flex items-center text-sm text-gray-400 group-hover:text-gray-200 transition-colors duration-300">
-                      <div className={`w-2 h-2 bg-gradient-to-r ${service.gradient} rounded-full mr-3 animate-pulse`}></div>
+                    <motion.li 
+                      key={featureIndex} 
+                      className="flex items-center text-sm text-white/60 hover:text-white transition-colors duration-300"
+                      initial={{ opacity: 0, x: -10 }}
+                      animate={isInView ? { opacity: 1, x: 0 } : {}}
+                      transition={{ delay: index * 0.1 + featureIndex * 0.05 + 0.3 }}
+                    >
+                      <motion.div 
+                        className={`w-1.5 md:w-2 h-1.5 md:h-2 bg-gradient-to-r ${service.gradient} rounded-full mr-2 md:mr-3`}
+                        animate={{ scale: [1, 1.2, 1] }}
+                        transition={{ duration: 2, repeat: Infinity, delay: featureIndex * 0.2 }}
+                      />
                       {feature}
-                    </li>
+                    </motion.li>
                   ))}
                 </ul>
                 
-                <div className="pt-6 border-t border-gray-100">
-                  <button className={`text-transparent bg-clip-text bg-gradient-to-r ${service.gradient} font-medium hover:scale-105 transition-all duration-300 group flex items-center`}>
+                <div className="pt-4 md:pt-6 border-t border-white/20">
+                  <motion.button 
+                    className="text-accent-400 font-medium hover:scale-105 transition-all duration-300 group flex items-center text-sm md:text-base"
+                    whileHover={{ x: 5 }}
+                  >
                     Learn More
-                    <span className="inline-block ml-2 group-hover:translate-x-2 transition-transform duration-300">→</span>
-                  </button>
+                    <span className="inline-block ml-2">→</span>
+                  </motion.button>
                 </div>
-              </div>
+              </motion.div>
               
-              {/* Corner Accent */}
-              <div className={`absolute bottom-0 right-0 w-16 h-16 bg-gradient-to-tl ${service.gradient} opacity-10 group-hover:opacity-20 transition-opacity duration-500`}
-                   style={{ clipPath: 'polygon(100% 0, 100% 100%, 0 100%)' }}></div>
-            </div>
+              <div className={`absolute bottom-0 right-0 w-20 h-20 bg-gradient-to-tl ${service.gradient} opacity-10 group-hover:opacity-20 transition-opacity duration-500 rounded-tl-2xl`}></div>
+            </motion.div>
           ))}
         </div>
       </div>

@@ -1,6 +1,11 @@
+import { motion, useInView } from 'framer-motion';
+import { useRef } from 'react';
 import { Linkedin, Twitter, Mail } from 'lucide-react';
 
 const Team = () => {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: "-100px" });
+
   const teamMembers = [
     {
       name: 'Sarah Johnson',
@@ -10,7 +15,7 @@ const Team = () => {
       linkedin: '#',
       twitter: '#',
       email: '#',
-      gradient: 'from-blue-500 to-purple-600'
+      gradient: 'from-black/60 to-black/80'
     },
     {
       name: 'Michael Chen',
@@ -20,7 +25,7 @@ const Team = () => {
       linkedin: '#',
       twitter: '#',
       email: '#',
-      gradient: 'from-green-500 to-teal-600'
+      gradient: 'from-accent-500 to-accent-600'
     },
     {
       name: 'Emily Rodriguez',
@@ -30,7 +35,7 @@ const Team = () => {
       linkedin: '#',
       twitter: '#',
       email: '#',
-      gradient: 'from-orange-500 to-red-600'
+      gradient: 'from-primary-600 to-accent-500'
     },
     {
       name: 'David Thompson',
@@ -40,7 +45,7 @@ const Team = () => {
       linkedin: '#',
       twitter: '#',
       email: '#',
-      gradient: 'from-indigo-500 to-blue-600'
+      gradient: 'from-black/80 to-black'
     },
     {
       name: 'Lisa Park',
@@ -50,7 +55,7 @@ const Team = () => {
       linkedin: '#',
       twitter: '#',
       email: '#',
-      gradient: 'from-pink-500 to-rose-600'
+      gradient: 'from-accent-500 to-accent-700'
     },
     {
       name: 'Robert Martinez',
@@ -60,106 +65,121 @@ const Team = () => {
       linkedin: '#',
       twitter: '#',
       email: '#',
-      gradient: 'from-yellow-500 to-orange-600'
+      gradient: 'from-black/40 to-black/60'
     }
   ];
 
   return (
-    <section id="team" className="py-20 relative overflow-hidden">
-      {/* Background Image with Overlay */}
-      <div 
-        className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-5"
-        style={{
-          backgroundImage: 'url(https://images.pexels.com/photos/3184360/pexels-photo-3184360.jpeg?auto=compress&cs=tinysrgb&w=1920)'
-        }}
-      ></div>
-      <div className="absolute inset-0 bg-gradient-to-br from-gray-50 to-white"></div>
-      
-      {/* Animated Background Elements */}
-      <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute top-10 left-10 w-40 h-40 bg-blue-500/5 rounded-full blur-3xl animate-float"></div>
-        <div className="absolute bottom-10 right-10 w-56 h-56 bg-orange-500/5 rounded-full blur-3xl animate-float-delayed"></div>
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-32 h-32 bg-green-500/5 rounded-full blur-3xl animate-pulse"></div>
+    <section id="team" className="py-24 relative overflow-hidden bg-black/60">
+      <div className="absolute inset-0 opacity-3">
+        <div className="absolute top-0 left-0 w-full h-full" style={{
+          backgroundImage: `radial-gradient(circle at 2px 2px, rgba(0,0,0,0.03) 1px, transparent 0)`,
+          backgroundSize: '32px 32px'
+        }}></div>
       </div>
       
+      <motion.div 
+        className="absolute inset-0 overflow-hidden"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 1 }}
+      >
+        <motion.div 
+          className="absolute top-10 left-10 w-40 h-40 bg-accent-400/10 rounded-full blur-3xl"
+          animate={{ x: [0, 20, 0], y: [0, -20, 0] }}
+          transition={{ duration: 8, repeat: Infinity }}
+        />
+        <motion.div 
+          className="absolute bottom-10 right-10 w-56 h-56 bg-white/10 rounded-full blur-3xl"
+          animate={{ x: [0, -20, 0], y: [0, 20, 0] }}
+          transition={{ duration: 10, repeat: Infinity, delay: 1 }}
+        />
+      </motion.div>
+      
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4 animate-fade-in-up">
+        <motion.div 
+          className="text-center mb-16"
+          initial={{ opacity: 0, y: 30 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.6 }}
+        >
+          <motion.span 
+            className="inline-block px-4 py-1.5 bg-accent-500/40 text-accent-300   rounded-full text-sm font-medium mb-4"
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={isInView ? { opacity: 1, scale: 1 } : {}}
+            transition={{ delay: 0.2 }}
+          >
+            Our Experts
+          </motion.span>
+          <h2 className="text-4xl md:text-5xl font-bold text-white mb-4" style={{ fontFamily: 'var(--font-heading)' }}>
             Meet Our Team
           </h2>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto animate-fade-in-up delay-200">
+          <p className="text-xl text-white/90 max-w-3xl mx-auto">
             Our diverse team of experts brings together decades of experience from top-tier consulting firms, 
             Fortune 500 companies, and leading academic institutions.
           </p>
-        </div>
+        </motion.div>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" ref={ref}>
           {teamMembers.map((member, index) => (
-            <div
+            <motion.div
               key={index}
-              className="group relative bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-4 animate-fade-in-up"
-              style={{
-                animationDelay: `${index * 100}ms`,
-                clipPath: 'polygon(0 0, calc(100% - 20px) 0, 100% 20px, 100% calc(100% - 20px), calc(100% - 20px) 100%, 0 100%)'
-              }}
+              className="group relative bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-500 border border-white/20"
+              initial={{ opacity: 0, y: 50 }}
+              animate={isInView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.6, delay: index * 0.1 }}
+              whileHover={{ y: -8 }}
             >
-              {/* Image Container */}
+              <div className={`absolute inset-0 bg-gradient-to-br ${member.gradient} opacity-0 group-hover:opacity-10 transition-opacity duration-500 rounded-2xl`}></div>
+              
               <div className="relative overflow-hidden">
-                <img
+                <motion.img
                   src={member.image}
                   alt={member.name}
-                  className="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-700"
+                  className="w-full h-72 object-cover"
+                  whileHover={{ scale: 1.1 }}
+                  transition={{ duration: 0.7 }}
                 />
-                {/* Gradient Overlay */}
-                <div className={`absolute inset-0 bg-gradient-to-t ${member.gradient} opacity-0 group-hover:opacity-20 transition-opacity duration-500`}></div>
                 
-                {/* Social Links Overlay */}
-                <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                  <div className="flex space-x-4 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
-                    <a
-                      href={member.linkedin}
-                      className="w-10 h-10 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center text-white hover:bg-blue-600 hover:scale-110 transition-all duration-300"
-                    >
-                      <Linkedin className="h-5 w-5" />
-                    </a>
-                    <a
-                      href={member.twitter}
-                      className="w-10 h-10 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center text-white hover:bg-blue-400 hover:scale-110 transition-all duration-300"
-                    >
-                      <Twitter className="h-5 w-5" />
-                    </a>
-                    <a
-                      href={member.email}
-                      className="w-10 h-10 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center text-white hover:bg-orange-500 hover:scale-110 transition-all duration-300"
-                    >
-                      <Mail className="h-5 w-5" />
-                    </a>
-                  </div>
-                </div>
-              </div>
-              
-              <div className="p-6 relative">
-                {/* Background Accent */}
-                <div className={`absolute top-0 right-0 w-16 h-16 bg-gradient-to-bl ${member.gradient} opacity-5 group-hover:opacity-10 transition-opacity duration-500`}
-                     style={{ clipPath: 'polygon(100% 0, 100% 70%, 30% 100%, 0 0)' }}></div>
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-60"></div>
                 
-                <div className="relative z-10">
-                  <h3 className="text-xl font-semibold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors duration-300">
+                <div className="absolute bottom-0 left-0 right-0 p-6 transform translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
+                  <h3 className="text-xl font-semibold text-white mb-1" style={{ fontFamily: 'var(--font-heading)' }}>
                     {member.name}
                   </h3>
-                  <p className={`text-transparent bg-clip-text bg-gradient-to-r ${member.gradient} font-medium mb-3`}>
+                  <p className="text-accent-400 font-medium text-sm">
                     {member.role}
                   </p>
-                  <p className="text-gray-600 text-sm leading-relaxed">
-                    {member.bio}
-                  </p>
                 </div>
+                
+                <motion.div 
+                  className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center"
+                >
+                  <div className="flex space-x-3 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
+                    {[
+                      { icon: <Linkedin className="h-5 w-5" />, href: member.linkedin },
+                      { icon: <Twitter className="h-5 w-5" />, href: member.twitter },
+                      { icon: <Mail className="h-5 w-5" />, href: member.email }
+                    ].map((social, i) => (
+                      <motion.a
+                        key={i}
+                        href={social.href}
+                        className="w-10 h-10 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center text-white hover:bg-accent-500 hover:scale-110 transition-all duration-300"
+                        whileHover={{ scale: 1.1 }}
+                      >
+                        {social.icon}
+                      </motion.a>
+                    ))}
+                  </div>
+                </motion.div>
               </div>
               
-              {/* Animated Border */}
-              <div className={`absolute inset-0 rounded-xl bg-gradient-to-r ${member.gradient} opacity-0 group-hover:opacity-20 transition-opacity duration-500`}
-                   style={{ clipPath: 'inset(0 round 12px)', mask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)', maskComposite: 'xor' }}></div>
-            </div>
+              <div className="p-6">
+                <p className="text-black/ text-sm leading-relaxed">
+                  {member.bio}
+                </p>
+              </div>
+            </motion.div>
           ))}
         </div>
       </div>

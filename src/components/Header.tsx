@@ -1,9 +1,14 @@
 import { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';
-import logo from "../assets/logoonly.png"
+import logo from "/logoonly.png"
+
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -14,77 +19,126 @@ const Header = () => {
   }, []);
 
   const scrollToSection = (id: string) => {
-    const element = document.getElementById(id);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
+    if (location.pathname !== '/') {
+      navigate('/');
+      setTimeout(() => {
+        const element = document.getElementById(id);
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth' });
+        }
+      }, 100);
+    } else {
+      const element = document.getElementById(id);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth' });
+      }
     }
     setIsMenuOpen(false);
   };
 
+  const navItems = [
+    { name: 'Home', id: 'home' },
+    { name: 'Services', id: 'services' },
+    { name: 'How It Works', id: 'how-it-works' },
+    { name: 'About', id: 'about' },
+    { name: 'Projects', id: 'projects' },
+    { name: 'Team', id: 'team' },
+    { name: 'Contact', id: 'contact' },
+  ];
+
   return (
-    <header className={`fixed w-full z-50 transition-all duration-300 ${
-      isScrolled ? 'bg-white shadow-md' : 'bg-transparent'
-    }`}>
+    <motion.header 
+      className="fixed top-0 w-full z-50 bg-white/30 backdrop-blur-sm border-b border-white/20"
+      initial={{ y: -100 }}
+      animate={{ y: 0 }}
+      transition={{ duration: 0.5 }}
+    >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
-          <div className="flex items-center space-x-3">
+<div className="flex justify-between items-center h-16 sm:h-20">
+          <motion.div 
+            className="flex items-center gap-2 sm:gap-3 cursor-pointer"
+            onClick={() => scrollToSection('home')}
+            whileHover={{ scale: 1.02 }}
+          >
             <img 
               src={logo}
               alt="Bridge Management Consultancy" 
-              className="h-10 w-auto"
+              className="h-10 sm:h-12 w-auto"
             />
-            <span className={`text-xl font-bold ${isScrolled ? 'text-gray-900' : 'text-white'}`}>
-              Bridge
+            <span className={`hidden sm:inline text-xl sm:text-2xl font-bold tracking-wide ${isScrolled ? 'text-white' : 'text-white'}`} style={{ fontFamily: 'var(--font-heading)' }}>
+              BRIDGE
             </span>
-          </div>
+          </motion.div>
           
-          <nav className="hidden md:flex items-center space-x-8">
-            {['Home', 'Services', 'About', 'Team', 'Contact'].map((item) => (
-              <button
-                key={item}
-                onClick={() => scrollToSection(item.toLowerCase())}
-                className={`text-sm font-medium transition-colors duration-200 hover:text-red-600 ${
-                  isScrolled ? 'text-gray-700' : 'text-white'
-                }`}
-              >
-                {item}
-              </button>
-            ))}
-            <button
-              onClick={() => scrollToSection('contact')}
-              className="bg-red-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-red-700 transition-colors duration-200"
-            >
-              Get Started
-            </button>
-          </nav>
-
-          <div className="md:hidden">
+          <div className="flex items-center gap-3 sm:gap-4 md:hidden">
+             <motion.button
+               onClick={() => scrollToSection('contact')}
+               className="bg-accent-500 text-white px-4 py-2 rounded-lg font-semibold text-sm hover:bg-accent-600 transition-all duration-200 hover:shadow-lg"
+               whileHover={{ scale: 1.05 }}
+               whileTap={{ scale: 0.98 }}
+             >
+               Get Started
+             </motion.button>
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className={`${isScrolled ? 'text-gray-700' : 'text-white'}`}
+              className={`p-2 ${isScrolled ? 'text-white/90' : 'text-white'}`}
             >
               {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
             </button>
           </div>
+          
+          <nav className="hidden md:flex items-center space-x-6 lg:space-x-8">
+            {navItems.map((item) => (
+              <motion.button
+                key={item.name}
+                onClick={() => scrollToSection(item.id)}
+                className={`text-sm font-medium transition-colors duration-200 hover:text-accent-500 ${
+                  isScrolled ? 'text-white/90' : 'text-white/90'
+                }`}
+                whileHover={{ color: '#ffc107' }}
+              >
+                {item.name}
+              </motion.button>
+            ))}
+            <motion.button
+              onClick={() => scrollToSection('contact')}
+              className="bg-accent-500 text-white px-5 py-2 rounded-lg font-semibold text-sm hover:bg-accent-600 transition-all duration-200 hover:shadow-lg"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.98 }}
+            >
+              Get Started
+            </motion.button>
+          </nav>
         </div>
       </div>
 
-      {isMenuOpen && (
-        <div className="md:hidden bg-white border-t">
-          <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-            {['Home', 'Services', 'About', 'Team', 'Contact'].map((item) => (
-              <button
-                key={item}
-                onClick={() => scrollToSection(item.toLowerCase())}
-                className="block px-3 py-2 text-base font-medium text-gray-700 hover:text-red-600 hover:bg-gray-50 rounded-md w-full text-left"
-              >
-                {item}
-              </button>
-            ))}
-          </div>
-        </div>
-      )}
-    </header>
+      <AnimatePresence>
+        {isMenuOpen && (
+          <motion.div 
+            className="md:hidden bg-black/30 backdrop-blur-md border-t"
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.3 }}
+          >
+            <div className="px-4 pt-2 pb-4 space-y-1 sm:px-6">
+              {navItems.map((item, index) => (
+                <motion.button
+                  key={item.name}
+                  onClick={() => scrollToSection(item.id)}
+                  className="block px-4 py-3 text-base font-medium text-white hover:bg-white/10 rounded-lg w-full text-left"
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: index * 0.05 }}
+                >
+                  {item.name}
+                </motion.button>
+              ))}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </motion.header>
   );
 };
 
