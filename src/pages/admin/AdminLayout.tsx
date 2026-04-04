@@ -70,15 +70,13 @@ export default function AdminLayout() {
 
       {/* Sidebar */}
       <aside 
-        className={`fixed md:relative inset-y-0 left-0 z-50 bg-[#262e49] border-r border-[#3f4d7f]/30 transition-all duration-300 ${
+        className={`fixed inset-y-0 left-0 z-50 bg-[#262e49] border-r border-[#3f4d7f]/30 transition-all duration-300 ${
           isMobile 
             ? sidebarOpen 
               ? 'translate-x-0' 
               : '-translate-x-full'
-            : sidebarOpen 
-              ? 'w-64' 
-              : 'w-20'
-        } ${!isMobile && 'md:flex-shrink-0'}`}
+            : 'relative'
+        } ${sidebarOpen ? 'w-64' : 'w-20'}`}
       >
         <div className="flex flex-col h-full">
           <div className="p-4 border-b border-[#3f4d7f]/30">
@@ -129,7 +127,7 @@ export default function AdminLayout() {
       </aside>
 
       {/* Main Content */}
-      <main className={`flex-1 transition-all duration-300 ${!isMobile && (sidebarOpen ? 'md:ml-64' : 'md:ml-20')}`}>
+      <main className="flex-1 min-w-0 transition-all duration-300">
         <header className="bg-[#262e49]/50 backdrop-blur-xl border-b border-[#3f4d7f]/30 sticky top-0 z-30 px-4 sm:px-6 py-3 sm:py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
