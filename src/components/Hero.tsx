@@ -1,10 +1,12 @@
 import { useRef } from 'react';
 import { motion, useInView } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
+import { useContent } from '../context/ContentContext';
 
 const Hero = () => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true });
+  const { hero } = useContent();
 
   const scrollToContact = () => {
     const element = document.getElementById('contact');
@@ -38,7 +40,7 @@ const Hero = () => {
       <div 
         className="absolute inset-0 bg-cover bg-center bg-no-repeat"
         style={{
-          backgroundImage: 'url(https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg?auto=compress&cs=tinysrgb&w=1920)'
+          backgroundImage: `url(${hero.backgroundImage})`
         }}
       ></div>
       <div className="absolute inset-0 bg-gradient-to-br from-black/80 via-black/60 to-black/40"></div>
@@ -104,8 +106,7 @@ const Hero = () => {
             className="text-base sm:text-lg md:text-xl lg:text-2xl text-white/80 mb-6 sm:mb-8 max-w-2xl sm:max-w-3xl mx-auto"
             variants={itemVariants}
           >
-            We help businesses unlock their potential through strategic planning, 
-            operational excellence, and innovative solutions that drive measurable results.
+            {hero.subtitle}
           </motion.p>
           
           <motion.div 
@@ -118,7 +119,7 @@ const Hero = () => {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.98 }}
             >
-              <span>Get Free Consultation</span>
+              <span>{hero.ctaPrimary}</span>
               <ArrowRight className="h-4 sm:h-5 w-4 sm:w-5 group-hover:translate-x-2 transition-transform duration-300" />
             </motion.button>
             
@@ -127,7 +128,7 @@ const Hero = () => {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.98 }}
             >
-              Learn More
+              {hero.ctaSecondary}
             </motion.button>
           </motion.div>
           
@@ -135,11 +136,7 @@ const Hero = () => {
             className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 sm:gap-8 max-w-2xl sm:max-w-3xl mx-auto"
             variants={itemVariants}
           >
-            {[
-              { number: '500+', label: 'Projects Completed' },
-              { number: '98%', label: 'Client Satisfaction' },
-              { number: '50+', label: 'Industry Experts' }
-            ].map((stat, index) => (
+            {hero.stats.map((stat, index) => (
               <motion.div 
                 key={index} 
                 className="text-center"

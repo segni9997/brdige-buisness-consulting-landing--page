@@ -1,55 +1,25 @@
 import { motion, useInView } from 'framer-motion';
 import { useRef } from 'react';
-import { BarChart3, Target, Users, Zap, TrendingUp, Shield } from 'lucide-react';
+import { BarChart3, Target, Users, Zap, TrendingUp, Shield, Cpu, Globe, Briefcase, Headphones } from 'lucide-react';
+import { useContent } from '../context/ContentContext';
+
+const iconMap: Record<string, React.ReactNode> = {
+  BarChart3: <BarChart3 className="h-8 w-8" />,
+  Target: <Target className="h-8 w-8" />,
+  Users: <Users className="h-8 w-8" />,
+  Zap: <Zap className="h-8 w-8" />,
+  TrendingUp: <TrendingUp className="h-8 w-8" />,
+  Shield: <Shield className="h-8 w-8" />,
+  Cpu: <Cpu className="h-8 w-8" />,
+  Globe: <Globe className="h-8 w-8" />,
+  Briefcase: <Briefcase className="h-8 w-8" />,
+  Headphones: <Headphones className="h-8 w-8" />,
+};
 
 const Services = () => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
-
-  const services = [
-    {
-      icon: <BarChart3 className="h-8 w-8" />,
-      title: 'Strategic Planning',
-      description: 'Develop comprehensive strategies that align with your business goals and market opportunities.',
-      features: ['Market Analysis', 'Growth Strategy', 'Risk Assessment', 'Performance Metrics'],
-      gradient: 'from-black/60 to-black/80'
-    },
-    {
-      icon: <Target className="h-8 w-8" />,
-      title: 'Operations Optimization',
-      description: 'Streamline your operations to improve efficiency, reduce costs, and enhance productivity.',
-      features: ['Process Mapping', 'Workflow Automation', 'Quality Management', 'Cost Reduction'],
-      gradient: 'from-accent-500 to-accent-600'
-    },
-    {
-      icon: <Users className="h-8 w-8" />,
-      title: 'Organizational Development',
-      description: 'Build high-performing teams and create a culture that drives sustainable success.',
-      features: ['Leadership Development', 'Team Building', 'Change Management', 'Culture Transformation'],
-      gradient: 'from-accent-500 to-accent-700'
-    },
-    {
-      icon: <Zap className="h-8 w-8" />,
-      title: 'Digital Transformation',
-      description: 'Leverage technology to modernize your business processes and stay competitive.',
-      features: ['Technology Integration', 'Digital Strategy', 'Data Analytics', 'Innovation Lab'],
-      gradient: 'from-black/40 to-black/60'
-    },
-    {
-      icon: <TrendingUp className="h-8 w-8" />,
-      title: 'Financial Advisory',
-      description: 'Optimize your financial performance with expert guidance on budgeting and forecasting.',
-      features: ['Financial Planning', 'Investment Strategy', 'Cash Flow Management', 'M&A Advisory'],
-      gradient: 'from-primary-600 to-accent-500'
-    },
-    {
-      icon: <Shield className="h-8 w-8" />,
-      title: 'Risk Management',
-      description: 'Identify, assess, and mitigate business risks to protect your organization.',
-      features: ['Risk Assessment', 'Compliance', 'Crisis Management', 'Insurance Strategy'],
-      gradient: 'from-primary-700 to-primary-900'
-    }
-  ];
+  const { services } = useContent();
 
   return (
     <section id="services" className="py-16 md:py-24 relative overflow-hidden bg-black/80">
@@ -91,18 +61,18 @@ const Services = () => {
             animate={isInView ? { opacity: 1, scale: 1 } : {}}
             transition={{ delay: 0.2, duration: 0.4 }}
           >
-            What We Offer
+            {services.subtitle}
           </motion.span>
           <h2 className="text-3xl md:text-4xl md:text-5xl font-bold text-white mb-4" style={{ fontFamily: 'var(--font-heading)' }}>
-            Our Services
+            {services.title}
           </h2>
           <p className="text-lg md:text-xl text-white/80 max-w-3xl mx-auto">
-            We offer comprehensive consulting services designed to address your unique business challenges and unlock new opportunities for growth.
+            {services.description}
           </p>
         </motion.div>
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8" ref={ref}>
-          {services.map((service, index) => (
+          {services.services.map((service, index) => (
             <motion.div
               key={index}
               className="group relative bg-black/50 backdrop-blur-sm rounded-2xl p-8 border border-white/20 hover:border-accent-500/30 transition-all duration-500"
@@ -119,7 +89,7 @@ const Services = () => {
                   whileHover={{ scale: 1.1, rotate: 12 }}
                   transition={{ type: "spring", stiffness: 300 }}
                 >
-                  {service.icon}
+                  {iconMap[service.icon] || <BarChart3 className="h-8 w-8" />}
                 </motion.div>
                 
                 <h3 className="text-lg md:text-xl font-semibold text-white mb-3 md:mb-4 group-hover:text-accent-400 transition-colors duration-300" style={{ fontFamily: 'var(--font-heading)' }}>

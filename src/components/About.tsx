@@ -1,9 +1,11 @@
 import { motion, useInView } from 'framer-motion';
 import { useRef } from 'react';
+import { useContent } from '../context/ContentContext';
 
 const About = () => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
+  const { about } = useContent();
 
   return (
     <section id="about" className="py-16 md:py-24 relative overflow-hidden bg-black/40">
@@ -45,17 +47,14 @@ const About = () => {
               animate={isInView ? { opacity: 1, scale: 1 } : {}}
               transition={{ delay: 0.2 }}
             >
-              About Us
+              {about.subtitle}
             </motion.span>
             <h2 className="text-3xl md:text-4xl md:text-5xl font-bold text-white mb-4 md:mb-6" style={{ fontFamily: 'var(--font-heading)' }}>
               About Bridge
             </h2>
             
             <p className="text-base md:text-lg text-white/70 mb-6 md:mb-8 leading-relaxed">
-              Founded in 2008, Bridge Management Consultancy Services has been at the forefront of business transformation, 
-              helping organizations navigate complex challenges and unlock their full potential. 
-              Our approach combines deep industry knowledge with innovative methodologies to deliver 
-              sustainable results.
+              {about.description}
             </p>
             
             <div className="space-y-6 md:space-y-8">
@@ -69,10 +68,9 @@ const About = () => {
                   <div className="w-3 md:w-4 h-3 md:h-4 bg-white rounded-full"></div>
                 </div>
                 <div>
-                  <h3 className="font-semibold text-white/80 mb-1 md:mb-2 group-hover:text-accent-600 transition-colors duration-300 text-sm md:text-base" style={{ fontFamily: 'var(--font-heading)' }}>Our Mission</h3>
+                  <h3 className="font-semibold text-white/80 mb-1 md:mb-2 group-hover:text-accent-600 transition-colors duration-300 text-sm md:text-base" style={{ fontFamily: 'var(--font-heading)' }}>{about.missionTitle}</h3>
                   <p className="text-white/70 leading-relaxed text-sm md:text-base">
-                    To empower businesses with strategic insights and practical solutions that drive 
-                    measurable growth and lasting competitive advantage.
+                    {about.missionContent}
                   </p>
                 </div>
               </motion.div>
@@ -87,10 +85,9 @@ const About = () => {
                   <div className="w-3 md:w-4 h-3 md:h-4 bg-white rounded-full"></div>
                 </div>
                 <div>
-                  <h3 className="font-semibold text-white/80 mb-1 md:mb-2 group-hover:text-white/70 transition-colors duration-300 text-sm md:text-base" style={{ fontFamily: 'var(--font-heading)' }}>Our Vision</h3>
+                  <h3 className="font-semibold text-white/80 mb-1 md:mb-2 group-hover:text-white/70 transition-colors duration-300 text-sm md:text-base" style={{ fontFamily: 'var(--font-heading)' }}>{about.visionTitle}</h3>
                   <p className="text-white/70 leading-relaxed text-sm md:text-base">
-                    To be the trusted partner for organizations seeking to transform their operations 
-                    and achieve breakthrough performance in an ever-evolving business landscape.
+                    {about.visionContent}
                   </p>
                 </div>
               </motion.div>
@@ -109,14 +106,14 @@ const About = () => {
               transition={{ duration: 0.3 }}
             >
               <img
-                src="https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg?auto=compress&cs=tinysrgb&w=800"
+                src={about.image}
                 alt="Team collaboration"
                 className="w-full h-64 md:h-80 lg:h-96 object-cover"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
               <div className="absolute bottom-4 md:bottom-6 left-4 md:left-6 right-4 md:right-6">
                 <p className="text-white font-semibold text-sm md:text-lg" style={{ fontFamily: 'var(--font-heading)' }}>
-                  Trusted by 500+ companies worldwide
+                  {about.companiesCount}
                 </p>
               </div>
             </motion.div>
@@ -128,7 +125,7 @@ const About = () => {
               transition={{ delay: 0.6, type: "spring" }}
             >
               <div className="flex items-center space-x-3 md:space-x-4">
-                <div className="text-2xl md:text-4xl font-bold text-accent-500" style={{ fontFamily: 'var(--font-heading)' }}>15+</div>
+                <div className="text-2xl md:text-4xl font-bold text-accent-500" style={{ fontFamily: 'var(--font-heading)' }}>{about.yearsOfExcellence}</div>
                 <div>
                   <p className="text-white/70 font-medium text-xs md:text-sm">Years of</p>
                   <p className="text-white font-semibold text-sm md:text-base">Excellence</p>
@@ -162,11 +159,10 @@ const About = () => {
             
             <div className="relative z-10">
               <h3 className="text-2xl md:text-3xl font-bold text-white mb-3 md:mb-4" style={{ fontFamily: 'var(--font-heading)' }}>
-                Ready to Transform Your Business?
+                {about.ctaTitle}
               </h3>
               <p className="text-lg md:text-xl text-white/80 mb-6 md:mb-8 max-w-2xl mx-auto">
-                Join hundreds of successful companies that have partnered with us to achieve 
-                exceptional results and sustainable growth.
+                {about.ctaContent}
               </p>
               <motion.button 
                 className="bg-accent-500 text-white px-6 md:px-8 py-3 md:py-4 rounded-lg font-semibold text-base md:text-lg hover:bg-accent-600 transition-all duration-300"

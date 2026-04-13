@@ -1,41 +1,26 @@
 import { motion, useInView } from 'framer-motion';
 import { useRef } from 'react';
-import { Search, Lightbulb, Rocket, BarChart, ArrowRight, CheckCircle } from 'lucide-react';
+import { Search, Lightbulb, Rocket, BarChart, ArrowRight, CheckCircle, Cpu, Globe, Target, Users, Zap, TrendingUp, Shield } from 'lucide-react';
+import { useContent } from '../context/ContentContext';
+
+const iconMap: Record<string, React.ReactNode> = {
+  Search: <Search className="h-10 w-10" />,
+  Lightbulb: <Lightbulb className="h-10 w-10" />,
+  Rocket: <Rocket className="h-10 w-10" />,
+  BarChart: <BarChart className="h-10 w-10" />,
+  Target: <Target className="h-10 w-10" />,
+  Users: <Users className="h-10 w-10" />,
+  Zap: <Zap className="h-10 w-10" />,
+  TrendingUp: <TrendingUp className="h-10 w-10" />,
+  Shield: <Shield className="h-10 w-10" />,
+  Globe: <Globe className="h-10 w-10" />,
+  Cpu: <Cpu className="h-10 w-10" />,
+};
 
 const HowItWorks = () => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
-
-  const steps = [
-    {
-      number: '01',
-      icon: <Search className="h-10 w-10" />,
-      title: 'Discovery',
-      description: 'We dive deep into your business, analyzing operations, market position, and growth potential to identify key opportunities.',
-      deliverables: ['Business Audit', 'Market Analysis', 'SWOT Assessment', 'Stakeholder Interviews']
-    },
-    {
-      number: '02',
-      icon: <Lightbulb className="h-10 w-10" />,
-      title: 'Strategy',
-      description: 'Our experts craft a customized roadmap aligned with your goals, outlining clear pathways to transform vision into reality.',
-      deliverables: ['Strategic Plan', 'Implementation Roadmap', 'Resource Allocation', 'Risk Mitigation']
-    },
-    {
-      number: '03',
-      icon: <Rocket className="h-10 w-10" />,
-      title: 'Execution',
-      description: 'We work alongside your team to implement solutions, ensuring smooth transitions and minimal disruption to daily operations.',
-      deliverables: ['Project Management', 'Change Management', 'Team Training', 'Process Implementation']
-    },
-    {
-      number: '04',
-      icon: <BarChart className="h-10 w-10" />,
-      title: 'Optimization',
-      description: 'We continuously monitor results, refine strategies, and provide ongoing support to ensure sustainable long-term success.',
-      deliverables: ['Performance Tracking', 'KPI Dashboard', 'Quarterly Reviews', 'Continuous Improvement']
-    }
-  ];
+  const { howItWorks } = useContent();
 
   return (
     <section id="how-it-works" className="py-16 md:py-24 relative overflow-hidden bg-black">
@@ -80,18 +65,18 @@ const HowItWorks = () => {
             animate={isInView ? { opacity: 1, scale: 1 } : {}}
             transition={{ delay: 0.2, duration: 0.4 }}
           >
-            Our Process
+            {howItWorks.subtitle}
           </motion.span>
           <h2 className="text-3xl md:text-4xl md:text-5xl font-bold text-white mb-4 md:mb-6" style={{ fontFamily: 'var(--font-heading)' }}>
-            How We Work
+            {howItWorks.title}
           </h2>
           <p className="text-lg md:text-xl text-white/70 max-w-3xl mx-auto">
-            A proven 4-step methodology that delivers results. We partner with you from diagnosis to optimization.
+            {howItWorks.description}
           </p>
         </motion.div>
         
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 relative" ref={ref}>
-          {steps.map((step, index) => (
+          {howItWorks.steps.map((step, index) => (
             <motion.div
               key={index}
               className="relative"
@@ -117,7 +102,7 @@ const HowItWorks = () => {
                     whileHover={{ scale: 1.1, rotate: 6 }}
                     transition={{ type: "spring", stiffness: 300 }}
                   >
-                    {step.icon}
+                    {iconMap[step.icon] || <Search className="h-10 w-10" />}
                   </motion.div>
                 </div>
                 
@@ -146,7 +131,7 @@ const HowItWorks = () => {
                 </div>
               </motion.div>
               
-              {index < steps.length - 1 && (
+              {index < howItWorks.steps.length - 1 && (
                 <motion.div 
                   className="hidden lg:block absolute top-1/2 -right-2 md:-right-4 transform -translate-y-1/2 z-10"
                   initial={{ opacity: 0, x: -20 }}
@@ -176,7 +161,7 @@ const HowItWorks = () => {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.98 }}
           >
-            <span className="font-semibold text-base md:text-lg">Start Your Journey</span>
+            <span className="font-semibold text-base md:text-lg">{howItWorks.ctaText}</span>
             <ArrowRight className="h-4 md:h-5 w-4 md:w-5 ml-2" />
           </motion.div>
         </motion.div>

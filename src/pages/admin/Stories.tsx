@@ -1,25 +1,6 @@
 import { useState } from 'react';
 import { BookOpen, Plus, Search, Trash2, Edit, Eye, EyeOff, Calendar, User, X, Check, Eye as EyeIcon } from 'lucide-react';
-
-interface Story {
-  id: number;
-  title: string;
-  excerpt: string;
-  content: string;
-  author: string;
-  category: string;
-  image: string;
-  date: string;
-  status: 'published' | 'draft';
-  views: number;
-}
-
-const initialStories: Story[] = [
-  { id: 1, title: 'Growth Strategies for 2024', excerpt: 'Discover the latest strategies to grow your business in the new year.', content: 'Full content here...', author: 'Admin', category: 'Business', image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=400', date: '2024-01-15', status: 'published', views: 1250 },
-  { id: 2, title: 'Financial Planning Tips', excerpt: 'Essential tips for effective financial management in your company.', content: 'Full content here...', author: 'Admin', category: 'Finance', image: 'https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=400', date: '2024-01-12', status: 'published', views: 890 },
-  { id: 3, title: 'Market Analysis Report', excerpt: 'Comprehensive analysis of current market trends and predictions.', content: 'Full content here...', author: 'Admin', category: 'Analysis', image: 'https://images.unsplash.com/photo-1504868584819-f8e8b4b6d7e3?w=400', date: '2024-01-10', status: 'draft', views: 0 },
-  { id: 4, title: 'Startup Guide 2024', excerpt: 'Everything you need to know about starting a successful business.', content: 'Full content here...', author: 'Admin', category: 'Startup', image: 'https://images.unsplash.com/photo-1553484771-371a605b060b?w=400', date: '2024-01-08', status: 'published', views: 2100 },
-];
+import { useContent, type Story } from '../../context/ContentContext';
 
 const categories = ['Business', 'Finance', 'Analysis', 'Startup', 'Technology', 'Marketing'];
 
@@ -32,7 +13,7 @@ const defaultImages = [
 ];
 
 export default function Stories() {
-  const [stories, setStories] = useState<Story[]>(initialStories);
+  const { stories, updateStories } = useContent();
   const [showModal, setShowModal] = useState(false);
   const [modalMode, setModalMode] = useState<'add' | 'edit'>('add');
   const [searchTerm, setSearchTerm] = useState('');
@@ -83,22 +64,22 @@ export default function Stories() {
         image: formData.image || defaultImages[Math.floor(Math.random() * defaultImages.length)],
         date: new Date().toISOString().split('T')[0],
       };
-      setStories([newStory, ...stories]);
+      updateStories([newStory, ...stories]);
     } else {
       const updatedStory = stories.find(s => s.id === formData.id);
       if (updatedStory) {
-        setStories(stories.map(s => s.id === formData.id ? { ...formData, author: s.author, date: s.date } : s));
+        updateStories(stories.map(s => s.id === formData.id ? { ...formData, author: s.author, date: s.date } : s));
       }
     }
     setShowModal(false);
   };
 
   const handleDelete = (id: number) => {
-    setStories(stories.filter(s => s.id !== id));
+    updateStories(stories.filter(s => s.id !== id));
   };
 
   const handleStatusChange = (id: number, status: Story['status']) => {
-    setStories(stories.map(s => s.id === id ? { ...s, status } : s));
+    updateStories(stories.map(s => s.id === id ? { ...s, status } : s));
   };
 
   const filteredStories = stories.filter(s => {
