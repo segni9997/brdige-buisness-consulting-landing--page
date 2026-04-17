@@ -87,7 +87,7 @@ const Hero = () => {
       >
         <div className="max-w-4xl mx-auto">
           <motion.h1 
-            className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-white mb-4 sm:mb-6 leading-tight"
+            className="md:text-3xl text-3xl  lg:text-6xl xl:text-7xl font-bold text-white mb-4 md:mt-14 sm:mb-6 leading-tight"
             style={{ fontFamily: 'var(--font-heading)' }}
             variants={itemVariants}
           >

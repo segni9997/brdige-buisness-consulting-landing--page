@@ -273,6 +273,18 @@ const allCaseStudies = [
 const ITEMS_PER_PAGE = 8;
 
 const AllCaseStudies = () => {
+  useEffect(() => {
+    document.title = 'Case Studies | Bridge Business Consulting';
+    
+    let metaDesc = document.querySelector('meta[name="description"]');
+    if (!metaDesc) {
+      metaDesc = document.createElement('meta');
+      metaDesc.setAttribute('name', 'description');
+      document.head.appendChild(metaDesc);
+    }
+    metaDesc.setAttribute('content', 'Explore our comprehensive portfolio of successful business transformations across industries. See how Bridge Consulting has helped clients achieve remarkable results.');
+  }, []);
+
   const navigate = useNavigate();
   const [displayedItems, setDisplayedItems] = useState<typeof allCaseStudies>([]);
   const [page, setPage] = useState(1);

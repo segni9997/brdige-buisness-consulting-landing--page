@@ -1,7 +1,6 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { motion, useInView } from 'framer-motion';
-import { useRef } from 'react';
 import { ArrowLeft, Clock, Users, TrendingUp, DollarSign, CheckCircle, Star, Quote } from 'lucide-react';
 
 const caseStudies = [
@@ -315,13 +314,22 @@ const CaseStudyDetail = () => {
   
   const caseStudy = caseStudies.find(s => s.id === Number(id)) || caseStudies[0];
 
-  useEffect(() => {
+useEffect(() => {
     window.scrollTo(0, 0);
-  }, [id]);
+    document.title = `${caseStudy.title} | Bridge Business Consulting Case Study`;
+    
+    let metaDesc = document.querySelector('meta[name="description"]');
+    if (!metaDesc) {
+      metaDesc = document.createElement('meta');
+      metaDesc.setAttribute('name', 'description');
+      document.head.appendChild(metaDesc);
+    }
+    metaDesc.setAttribute('content', `${caseStudy.challenge.substring(0, 150)}...`);
+  }, [id, caseStudy.title, caseStudy.challenge]);
 
-  return (
+return (
     <div className="min-h-screen bg-black">
-      <motion.div 
+      <motion.div
         className="relative h-[60vh] md:h-[70vh] overflow-hidden"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}

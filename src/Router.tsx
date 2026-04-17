@@ -1,4 +1,5 @@
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
+import { useLayoutEffect } from 'react';
 import App from './App';
 import AdminLogin from './pages/admin/AdminLogin';
 import AdminDashboard from './pages/admin/AdminDashboard';
@@ -15,9 +16,19 @@ import AllCaseStudies from './pages/AllCaseStudies';
 import Layout from './components/Layout';
 import Stories from './pages/admin/Stories';
 
+function ScrollToTop() {
+  const { pathname } = useLocation();
+  useLayoutEffect(() => {
+    window.scrollTo(0, 0);
+    document.documentElement.scrollTop = 0;
+  }, [pathname]);
+  return null;
+}
+
 function Router() {
   return (
     <BrowserRouter>
+      <ScrollToTop />
       <Routes>
         <Route path="/" element={<App />} />
         <Route path="/case-studies" element={<Layout><AllCaseStudies /></Layout>} />
