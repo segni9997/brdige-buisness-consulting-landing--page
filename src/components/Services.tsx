@@ -1,7 +1,7 @@
 import { motion, useInView } from 'framer-motion';
 import { useRef } from 'react';
 import { BarChart3, Target, Users, Zap, TrendingUp, Shield, Cpu, Globe, Briefcase, Headphones } from 'lucide-react';
-import { useContent } from '../context/ContentContext';
+import { useGetServicesQuery } from '../store/api';
 
 const iconMap: Record<string, React.ReactNode> = {
   BarChart3: <BarChart3 className="h-8 w-8" />,
@@ -19,7 +19,9 @@ const iconMap: Record<string, React.ReactNode> = {
 const Services = () => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
-  const { services } = useContent();
+  const { data: services } = useGetServicesQuery();
+   console.log("services home side", services)
+  // if (!services) return null;
 
   return (
     <section id="services" className="py-16 md:py-24 relative overflow-hidden bg-black/80">
@@ -61,18 +63,18 @@ const Services = () => {
             animate={isInView ? { opacity: 1, scale: 1 } : {}}
             transition={{ delay: 0.2, duration: 0.4 }}
           >
-            {services.subtitle}
+            {services?.sectionSubtitle}
           </motion.span>
           <h2 className="text-3xl md:text-4xl md:text-5xl font-bold text-white mb-4" style={{ fontFamily: 'var(--font-heading)' }}>
-            {services.title}
+            {services?.sectionTitle}
           </h2>
           <p className="text-lg md:text-xl text-white/80 max-w-3xl mx-auto">
-            {services.description}
+            {services?.description}
           </p>
         </motion.div>
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8" ref={ref}>
-          {services.services.map((service, index) => (
+          {services?.services.map((service, index) => (
             <motion.div
               key={index}
               className="group relative bg-black/50 backdrop-blur-sm rounded-2xl p-8 border border-white/20 hover:border-accent-500/30 transition-all duration-500"
@@ -81,27 +83,27 @@ const Services = () => {
               transition={{ duration: 0.6, delay: index * 0.1 }}
               whileHover={{ y: -16 }}
             >
-              <div className={`absolute inset-0 bg-gradient-to-br ${service.gradient} opacity-0 group-hover:opacity-10 transition-opacity duration-500 rounded-2xl`}></div>
+              <div className={`absolute inset-0 bg-gradient-to-br ${service?.gradient} opacity-0 group-hover:opacity-10 transition-opacity duration-500 rounded-2xl`}></div>
               
               <motion.div className="relative p-6 md:p-8 z-10">
                 <motion.div 
-                  className={`text-white mb-4 md:mb-6 w-12 md:w-16 h-12 md:h-16 rounded-xl bg-gradient-to-br ${service.gradient} flex items-center justify-center shadow-lg`}
+                  className={`text-white mb-4 md:mb-6 w-12 md:w-16 h-12 md:h-16 rounded-xl bg-gradient-to-br ${service?.gradient} flex items-center justify-center shadow-lg`}
                   whileHover={{ scale: 1.1, rotate: 12 }}
                   transition={{ type: "spring", stiffness: 300 }}
                 >
-                  {iconMap[service.icon] || <BarChart3 className="h-8 w-8" />}
+                  {iconMap[service?.icon] || <BarChart3 className="h-8 w-8" />}
                 </motion.div>
                 
                 <h3 className="text-lg md:text-xl font-semibold text-white mb-3 md:mb-4 group-hover:text-accent-400 transition-colors duration-300" style={{ fontFamily: 'var(--font-heading)' }}>
-                  {service.title}
+                  {service?.title}
                 </h3>
                 
                 <p className="text-white/80 mb-4 md:mb-6 leading-relaxed text-sm md:text-base">
-                  {service.description}
+                  {service?.description}
                 </p>
                 
                 <ul className="space-y-2 md:space-y-3 mb-4 md:mb-6">
-                  {service.features.map((feature, featureIndex) => (
+                  {service?.features.map((feature, featureIndex) => (
                     <motion.li 
                       key={featureIndex} 
                       className="flex items-center text-sm text-white/60 hover:text-white transition-colors duration-300"
@@ -110,7 +112,7 @@ const Services = () => {
                       transition={{ delay: index * 0.1 + featureIndex * 0.05 + 0.3 }}
                     >
                       <motion.div 
-                        className={`w-1.5 md:w-2 h-1.5 md:h-2 bg-gradient-to-r ${service.gradient} rounded-full mr-2 md:mr-3`}
+                        className={`w-1.5 md:w-2 h-1.5 md:h-2 bg-gradient-to-r ${service?.gradient} rounded-full mr-2 md:mr-3`}
                         animate={{ scale: [1, 1.2, 1] }}
                         transition={{ duration: 2, repeat: Infinity, delay: featureIndex * 0.2 }}
                       />
@@ -130,7 +132,7 @@ const Services = () => {
                 </div>
               </motion.div>
               
-              <div className={`absolute bottom-0 right-0 w-20 h-20 bg-gradient-to-tl ${service.gradient} opacity-10 group-hover:opacity-20 transition-opacity duration-500 rounded-tl-2xl`}></div>
+              <div className={`absolute bottom-0 right-0 w-20 h-20 bg-gradient-to-tl ${service?.gradient} opacity-10 group-hover:opacity-20 transition-opacity duration-500 rounded-tl-2xl`}></div>
             </motion.div>
           ))}
         </div>

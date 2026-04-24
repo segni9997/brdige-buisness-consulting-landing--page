@@ -1,12 +1,14 @@
 import { motion, useInView } from 'framer-motion';
 import { useRef } from 'react';
 import { Star, Quote } from 'lucide-react';
-import { useContent } from '../context/ContentContext';
+import { useGetTestimonialsQuery } from '../store/api';
 
 const Testimonials = () => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
-  const { testimonials } = useContent();
+  const { data: testimonials } = useGetTestimonialsQuery();
+
+  if (!testimonials) return null;
 
   return (
     <section className="py-16 md:py-24 relative overflow-hidden bg-black/40">
@@ -48,18 +50,18 @@ const Testimonials = () => {
             animate={isInView ? { opacity: 1, scale: 1 } : {}}
             transition={{ delay: 0.2 }}
           >
-            {testimonials.subtitle}
+            {testimonials?.sectionSubtitle}
           </motion.span>
           <h2 className="text-3xl md:text-4xl md:text-5xl font-bold text-white mb-4" style={{ fontFamily: 'var(--font-heading)' }}>
-            {testimonials.title}
+            {testimonials?.sectionTitle}
           </h2>
           <p className="text-lg md:text-xl text-white/70 max-w-3xl mx-auto">
-            {testimonials.description}
+            {testimonials?.description}
           </p>
         </motion.div>
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8" ref={ref}>
-          {testimonials.testimonials.map((testimonial, index) => (
+          {testimonials?.testimonials?.map((testimonial, index) => (
             <motion.div
               key={index}
               className="group relative bg-white p-8 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 border border-white/20"
@@ -97,7 +99,7 @@ const Testimonials = () => {
                 
                 <div className="flex items-center">
                   <motion.img
-                    src={testimonial.image}
+                    src={testimonial.imageUrl}
                     alt={testimonial.name}
                     className="w-12 h-12 md:w-14 md:h-14 rounded-xl mr-3 md:mr-4 border-2 border-white/20 group-hover:border-accent-400"
                     initial={{ scale: 0 }}

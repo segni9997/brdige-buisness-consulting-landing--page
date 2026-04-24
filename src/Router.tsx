@@ -14,7 +14,7 @@ import TestimonialsManagement from './pages/admin/TestimonialsManagement';
 import CaseStudyDetail from './pages/CaseStudyDetail';
 import AllCaseStudies from './pages/AllCaseStudies';
 import Layout from './components/Layout';
-import Stories from './pages/admin/Stories';
+import StoriesManagement from './pages/admin/StoriesManagement';
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -39,7 +39,7 @@ function Router() {
           <Route index element={<AdminDashboard />} />
           <Route path="feedback" element={<Feedback />} />
           <Route path="comments" element={<Comments />} />
-          <Route path="stories" element={<Stories />} />
+          <Route path="stories" element={<StoriesManagement />} />
           <Route path="hero" element={<HeroManagement />} />
           <Route path="about" element={<AboutManagement />} />
           <Route path="services" element={<ServicesManagement />} />

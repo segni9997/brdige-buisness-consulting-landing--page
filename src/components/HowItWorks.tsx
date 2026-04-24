@@ -1,7 +1,7 @@
 import { motion, useInView } from 'framer-motion';
 import { useRef } from 'react';
 import { Search, Lightbulb, Rocket, BarChart, ArrowRight, CheckCircle, Cpu, Globe, Target, Users, Zap, TrendingUp, Shield } from 'lucide-react';
-import { useContent } from '../context/ContentContext';
+import { useGetHowItWorksQuery } from '../store/api';
 
 const iconMap: Record<string, React.ReactNode> = {
   Search: <Search className="h-10 w-10" />,
@@ -20,7 +20,9 @@ const iconMap: Record<string, React.ReactNode> = {
 const HowItWorks = () => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
-  const { howItWorks } = useContent();
+  const { data: howItWorks } = useGetHowItWorksQuery();
+
+  // if (!howItWorks) return null;
 
   return (
     <section id="how-it-works" className="py-16 md:py-24 relative overflow-hidden bg-black">
@@ -65,18 +67,18 @@ const HowItWorks = () => {
             animate={isInView ? { opacity: 1, scale: 1 } : {}}
             transition={{ delay: 0.2, duration: 0.4 }}
           >
-            {howItWorks.subtitle}
+            {howItWorks?.sectionSubtitle}
           </motion.span>
           <h2 className="text-3xl md:text-4xl md:text-5xl font-bold text-white mb-4 md:mb-6" style={{ fontFamily: 'var(--font-heading)' }}>
-            {howItWorks.title}
+            {howItWorks?.sectionTitle}
           </h2>
           <p className="text-lg md:text-xl text-white/70 max-w-3xl mx-auto">
-            {howItWorks.description}
+            {howItWorks?.description}
           </p>
         </motion.div>
         
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 relative" ref={ref}>
-          {howItWorks.steps.map((step, index) => (
+          {howItWorks?.steps.map((step, index) => (
             <motion.div
               key={index}
               className="relative"
@@ -93,7 +95,7 @@ const HowItWorks = () => {
                   style={{ fontFamily: 'var(--font-heading)' }}
                   whileHover={{ scale: 1.1 }}
                 >
-                  {step.number}
+                  {String(step.stepNumber).padStart(2, '0')}
                 </motion.div>
                 
                 <div className="mt-3 md:mt-4 mb-3 md:mb-4">
@@ -161,7 +163,7 @@ const HowItWorks = () => {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.98 }}
           >
-            <span className="font-semibold text-base md:text-lg">{howItWorks.ctaText}</span>
+            <span className="font-semibold text-base md:text-lg">{howItWorks?.ctaButtonText}</span>
             <ArrowRight className="h-4 md:h-5 w-4 md:w-5 ml-2" />
           </motion.div>
         </motion.div>

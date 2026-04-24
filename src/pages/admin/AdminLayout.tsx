@@ -21,10 +21,11 @@ const navItems = [
   { path: '/admin/dashboard/about', label: 'About Us', icon: Info },
   { path: '/admin/dashboard/services', label: 'Services', icon: Settings },
   { path: '/admin/dashboard/how-it-works', label: 'How It Works', icon: Layers },
-  { path: '/admin/dashboard/testimonials', label: 'Stories/Testimonials', icon: MessageCircle },
+  // { path: '/admin/dashboard/testimonials', label: 'Stories/Testimonials', icon: MessageCircle },
   { path: '/admin/dashboard/feedback', label: 'Feedback', icon: MessageSquare },
   { path: '/admin/dashboard/comments', label: 'Comments', icon: MessageCircle },
-  { path: '/admin/dashboard/stories', label: 'Blog Stories', icon: BookOpen },
+  { path: '/admin/dashboard/stories', label: 'Stories', icon: BookOpen },
+
 ];
 
 export default function AdminLayout() {

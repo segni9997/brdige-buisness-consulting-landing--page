@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { BookOpen, Plus, Search, Trash2, Edit, Eye, EyeOff, Calendar, User, X, Check, Eye as EyeIcon } from 'lucide-react';
-import { useContent, type Story } from '../../context/ContentContext';
+import { useGetStoriesQuery, useCreateStoryMutation, useUpdateStoryMutation, useDeleteStoryMutation, type TBlog } from '../../store/api';
 
 const categories = ['Business', 'Finance', 'Analysis', 'Startup', 'Technology', 'Marketing'];
 
@@ -13,78 +13,74 @@ const defaultImages = [
 ];
 
 export default function Stories() {
-  const { stories, updateStories } = useContent();
+  const { data: storiesData = [] } = useGetStoriesQuery();
+  const [createStory] = useCreateStoryMutation();
+  const [updateStory] = useUpdateStoryMutation();
+  const [deleteStory] = useDeleteStoryMutation();
   const [showModal, setShowModal] = useState(false);
   const [modalMode, setModalMode] = useState<'add' | 'edit'>('add');
   const [searchTerm, setSearchTerm] = useState('');
   const [filterStatus, setFilterStatus] = useState<string>('all');
-  const [previewStory, setPreviewStory] = useState<Story | null>(null);
+  const [previewStory, setPreviewStory] = useState<TBlog | null>(null);
 
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<Partial<TBlog>>({
     id: 0,
     title: '',
-    excerpt: '',
     content: '',
     category: 'Business',
-    image: '',
-    author: 'Admin',
-    date: '',
-    status: 'draft' as Story['status'],
-    views: 0,
+    imageUrl: '',
+    expert: 'Admin',
+    createdAt: '',
+    status: 'draft',
+    slug: '',
   });
 
   const openAddModal = () => {
     setFormData({
       id: 0,
       title: '',
-      excerpt: '',
       content: '',
       category: 'Business',
-      image: '',
-      author: 'Admin',
-      date: new Date().toISOString().split('T')[0],
+      imageUrl: '',
+      expert: 'Admin',
+      createdAt: new Date().toISOString().split('T')[0],
       status: 'draft',
-      views: 0,
+      slug: '',
     });
     setModalMode('add');
     setShowModal(true);
   };
 
-  const openEditModal = (story: Story) => {
+  const openEditModal = (story: TBlog) => {
     setFormData({ ...story });
     setModalMode('edit');
     setShowModal(true);
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (modalMode === 'add') {
-      const newStory: Story = {
+      const newStory = {
         ...formData,
-        id: Date.now(),
-        image: formData.image || defaultImages[Math.floor(Math.random() * defaultImages.length)],
-        date: new Date().toISOString().split('T')[0],
+        imageUrl: formData.imageUrl || defaultImages[Math.floor(Math.random() * defaultImages.length)],
       };
-      updateStories([newStory, ...stories]);
+      await createStory(newStory);
     } else {
-      const updatedStory = stories.find(s => s.id === formData.id);
-      if (updatedStory) {
-        updateStories(stories.map(s => s.id === formData.id ? { ...formData, author: s.author, date: s.date } : s));
-      }
+      await updateStory(formData as TBlog);
     }
     setShowModal(false);
   };
 
-  const handleDelete = (id: number) => {
-    updateStories(stories.filter(s => s.id !== id));
+  const handleDelete = async (id: number) => {
+    await deleteStory(id);
   };
 
-  const handleStatusChange = (id: number, status: Story['status']) => {
-    updateStories(stories.map(s => s.id === id ? { ...s, status } : s));
+  const handleStatusChange = async (story: TBlog, status: TBlog['status']) => {
+    await updateStory({ ...story, status });
   };
 
-  const filteredStories = stories.filter(s => {
+  const filteredStories = storiesData.filter(s => {
     const matchesSearch = s.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         s.excerpt.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         s.content.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          s.category.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesStatus = filterStatus === 'all' || s.status === filterStatus;
     return matchesSearch && matchesStatus;
@@ -98,9 +94,9 @@ export default function Stories() {
     }
   };
 
-  const totalViews = stories.reduce((acc, s) => acc + s.views, 0);
-  const publishedCount = stories.filter(s => s.status === 'published').length;
-  const draftCount = stories.filter(s => s.status === 'draft').length;
+  const totalViews = 0; // Views not tracked in MVP
+  const publishedCount = storiesData.filter(s => s.status === 'published').length;
+  const draftCount = storiesData.filter(s => s.status === 'draft').length;
 
   return (
     <div className="space-y-4 sm:space-y-6">
@@ -181,7 +177,7 @@ export default function Stories() {
           {filteredStories.map((story) => (
             <div key={story.id} className="bg-[#191f2f]/30 rounded-xl overflow-hidden hover:bg-[#191f2f]/50 transition-all">
               <div className="h-28 sm:h-40 bg-[#262e49] relative">
-                <img src={story.image} alt={story.title} className="w-full h-full object-cover" />
+                <img src={story.imageUrl} alt={story.title} className="w-full h-full object-cover" />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
                 <span className={`absolute top-2 sm:top-3 right-2 sm:right-3 px-2 sm:px-3 py-0.5 rounded-full text-xs font-medium ${getStatusColor(story.status)}`}>
                   {story.status}
@@ -191,16 +187,16 @@ export default function Stories() {
                 <div className="flex items-center gap-2 mb-1 sm:mb-2">
                   <span className="px-2 py-0.5 bg-[#3f4d7f]/20 text-[#3f4d7f] text-xs rounded-full">{story.category}</span>
                   <span className="text-slate-500 text-xs flex items-center gap-1">
-                    <EyeIcon className="w-3 h-3" /> {story.views}
+                    <EyeIcon className="w-3 h-3" /> 0
                   </span>
                 </div>
                 <h3 className="text-white font-semibold text-sm sm:text-lg mb-1 sm:mb-2 line-clamp-1">{story.title}</h3>
-                <p className="text-slate-400 text-xs sm:text-sm mb-2 sm:mb-3 line-clamp-2">{story.excerpt}</p>
+                <p className="text-slate-400 text-xs sm:text-sm mb-2 sm:mb-3 line-clamp-2">{story.content.substring(0, 100)}...</p>
                 <div className="flex items-center justify-between pt-2 sm:pt-3 border-t border-[#3f4d7f]/30">
                   <div className="flex items-center gap-2 text-slate-500 text-xs">
                     <Calendar className="w-3 h-3 sm:w-4 sm:h-4" />
-                    <span className="hidden sm:inline">{story.date}</span>
-                    <span className="sm:hidden">{story.date.slice(5)}</span>
+                    <span className="hidden sm:inline">{story.createdAt ? new Date(story.createdAt).toLocaleDateString() : ''}</span>
+                    <span className="sm:hidden">{story.createdAt ? new Date(story.createdAt).toLocaleDateString().slice(5) : ''}</span>
                   </div>
                   <div className="flex items-center gap-1">
                     <button
@@ -216,7 +212,7 @@ export default function Stories() {
                       <Edit className="w-3 h-3 sm:w-4 sm:h-4" />
                     </button>
                     <button
-                      onClick={() => handleStatusChange(story.id, story.status === 'published' ? 'draft' : 'published')}
+                      onClick={() => handleStatusChange(story, story.status === 'published' ? 'draft' : 'published')}
                       className="p-1.5 text-yellow-400 hover:text-yellow-300 hover:bg-yellow-500/10 rounded-lg transition-all"
                     >
                       {story.status === 'published' ? <EyeOff className="w-3 h-3 sm:w-4 sm:h-4" /> : <Check className="w-3 h-3 sm:w-4 sm:h-4" />}
@@ -280,7 +276,7 @@ export default function Stories() {
                 <label className="block text-sm font-medium text-slate-300 mb-2">Status</label>
                 <select
                   value={formData.status}
-                  onChange={(e) => setFormData({ ...formData, status: e.target.value as Story['status'] })}
+                  onChange={(e) => setFormData({ ...formData, status: e.target.value as TBlog['status'] })}
                   className="w-full px-3 sm:px-4 py-2.5 bg-[#191f2f]/50 border border-[#3f4d7f]/30 rounded-xl text-white text-sm"
                 >
                   <option value="draft">Draft</option>
@@ -291,19 +287,20 @@ export default function Stories() {
                 <label className="block text-sm font-medium text-slate-300 mb-2">Image URL</label>
                 <input
                   type="url"
-                  value={formData.image}
-                  onChange={(e) => setFormData({ ...formData, image: e.target.value })}
+                  value={formData.imageUrl}
+                  onChange={(e) => setFormData({ ...formData, imageUrl: e.target.value })}
                   className="w-full px-3 sm:px-4 py-2.5 bg-[#191f2f]/50 border border-[#3f4d7f]/30 rounded-xl text-white text-sm"
                   placeholder="https://..."
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-slate-300 mb-2">Excerpt</label>
-                <textarea
-                  value={formData.excerpt}
-                  onChange={(e) => setFormData({ ...formData, excerpt: e.target.value })}
-                  className="w-full px-3 sm:px-4 py-2.5 bg-[#191f2f]/50 border border-[#3f4d7f]/30 rounded-xl text-white h-20 resize-none text-sm"
-                  placeholder="Brief description"
+                <label className="block text-sm font-medium text-slate-300 mb-2">Expert Name</label>
+                <input
+                  type="text"
+                  value={formData.expert}
+                  onChange={(e) => setFormData({ ...formData, expert: e.target.value })}
+                  className="w-full px-3 sm:px-4 py-2.5 bg-[#191f2f]/50 border border-[#3f4d7f]/30 rounded-xl text-white text-sm"
+                  placeholder="John Doe"
                 />
               </div>
               <div>
@@ -338,7 +335,7 @@ export default function Stories() {
         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
           <div className="bg-[#262e49] border border-[#3f4d7f]/30 rounded-2xl p-4 sm:p-6 w-full max-w-lg max-h-[90vh] overflow-y-auto">
             <div className="h-32 sm:h-48 rounded-xl overflow-hidden mb-4">
-              <img src={previewStory.image} alt={previewStory.title} className="w-full h-full object-cover" />
+              <img src={previewStory.imageUrl} alt={previewStory.title} className="w-full h-full object-cover" />
             </div>
             <div className="flex items-center gap-2 mb-2 sm:mb-3">
               <span className="px-2 py-1 bg-[#3f4d7f]/20 text-[#3f4d7f] text-xs rounded-full">{previewStory.category}</span>
@@ -348,11 +345,11 @@ export default function Stories() {
             </div>
             <h2 className="text-xl sm:text-2xl font-bold text-white mb-2">{previewStory.title}</h2>
             <div className="flex items-center gap-3 sm:gap-4 text-slate-400 text-xs sm:text-sm mb-3 sm:mb-4">
-              <span className="flex items-center gap-1"><User className="w-3 h-3 sm:w-4 sm:h-4" /> {previewStory.author}</span>
-              <span className="flex items-center gap-1"><Calendar className="w-3 h-3 sm:w-4 sm:h-4" /> {previewStory.date}</span>
-              <span className="flex items-center gap-1"><EyeIcon className="w-3 h-3 sm:w-4 sm:h-4" /> {previewStory.views}</span>
+              <span className="flex items-center gap-1"><User className="w-3 h-3 sm:w-4 sm:h-4" /> {previewStory.expert}</span>
+              <span className="flex items-center gap-1"><Calendar className="w-3 h-3 sm:w-4 sm:h-4" /> {previewStory.createdAt ? new Date(previewStory.createdAt).toLocaleDateString() : ''}</span>
+              <span className="flex items-center gap-1"><EyeIcon className="w-3 h-3 sm:w-4 sm:h-4" /> 0</span>
             </div>
-            <p className="text-slate-300 mb-3 sm:mb-4 text-sm">{previewStory.excerpt}</p>
+            <p className="text-slate-300 mb-3 sm:mb-4 text-sm">{previewStory.content.substring(0, 100)}...</p>
             <div className="bg-[#191f2f]/30 p-3 sm:p-4 rounded-xl text-slate-300 text-sm">
               {previewStory.content || 'No content available.'}
             </div>

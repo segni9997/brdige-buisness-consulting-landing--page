@@ -1,26 +1,30 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Box, Lock, LogIn, AlertCircle } from 'lucide-react';
+import { useLoginMutation } from '../../store/api';
 
 export default function AdminLogin() {
   const navigate = useNavigate();
-  const [email, setEmail] = useState('');
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
-  const [loading, setLoading] = useState(false);
+  const [login, { isLoading }] = useLoginMutation();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
-    setLoading(true);
 
-    if (email === 'admin@bridge.com' && password === 'admin123') {
+    try {
+      const response = await login({ username, password }).unwrap();
       localStorage.setItem('adminToken', 'true');
+      localStorage.setItem('access_token', response.access);
+      localStorage.setItem('refresh_token', response.refresh);
+      // console.log(response);
       navigate('/admin/dashboard');
-    } else {
+    } catch (err) {
       setError('Invalid credentials');
+      console.error(err);
     }
-    setLoading(false);
   };
 
   return (
@@ -50,17 +54,17 @@ export default function AdminLogin() {
           
           <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-5">
             <div>
-              <label className="block text-sm font-medium text-slate-300 mb-2">Email</label>
+              <label className="block text-sm font-medium text-slate-300 mb-2">Username</label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                   <Lock className="w-4 h-4 sm:w-5 sm:h-5 text-slate-500" />
                 </div>
                 <input
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  type="text"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
                   className="w-full pl-10 sm:pl-12 pr-4 py-2.5 sm:py-3 bg-[#191f2f]/50 border border-[#3f4d7f]/30 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#3f4d7f] focus:border-transparent transition-all text-sm sm:text-base"
-                  placeholder="admin@bridge.com"
+                  placeholder="se"
                   required
                 />
               </div>
@@ -85,10 +89,10 @@ export default function AdminLogin() {
             
             <button
               type="submit"
-              disabled={loading}
+              disabled={isLoading}
               className="w-full flex items-center justify-center gap-2 py-2.5 sm:py-3 bg-gradient-to-r from-[#3f4d7f] to-[#3f4d7f]/80 hover:from-[#3f4d7f]/90 hover:to-[#3f4d7f]/70 text-white font-semibold rounded-lg transition-all transform hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 text-sm sm:text-base"
             >
-              {loading ? (
+              {isLoading ? (
                 <span>Signing in...</span>
               ) : (
                 <>
@@ -100,7 +104,7 @@ export default function AdminLogin() {
           </form>
           
           <p className="text-center text-slate-500 text-xs sm:text-sm mt-4 sm:mt-6">
-            Demo: admin@bridge.com / admin123
+            Demo: se / se1234
           </p>
         </div>
       </div>

@@ -1,12 +1,24 @@
 import { useRef } from 'react';
 import { motion, useInView } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
-import { useContent } from '../context/ContentContext';
+import { useGetHeroQuery } from '../store/api';
 
 const Hero = () => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true });
-  const { hero } = useContent();
+  const { data: hero } = useGetHeroQuery();
+
+  const getStatsArray = (stats: any) => {
+    if (Array.isArray(stats)) return stats;
+    try {
+      if (typeof stats === 'string') return JSON.parse(stats);
+    } catch (e) {
+      console.error("Failed to parse hero stats:", e);
+    }
+    return [];
+  };
+
+  const statsArray = getStatsArray(hero?.stats);
 
   const scrollToContact = () => {
     const element = document.getElementById('contact');
@@ -40,7 +52,7 @@ const Hero = () => {
       <div 
         className="absolute inset-0 bg-cover bg-center bg-no-repeat"
         style={{
-          backgroundImage: `url(${hero.backgroundImage})`
+          backgroundImage: `url(${hero?.backgroundImageUrl})`
         }}
       ></div>
       <div className="absolute inset-0 bg-gradient-to-br from-black/80 via-black/60 to-black/40"></div>
@@ -91,23 +103,16 @@ const Hero = () => {
             style={{ fontFamily: 'var(--font-heading)' }}
             variants={itemVariants}
           >
-            Bridge Management Consultancy
+            {hero?.title}
             <motion.span 
               className="text-transparent bg-clip-text bg-gradient-to-r from-accent-400 via-accent-500 to-accent-600 block mt-2"
               initial={{ opacity: 0, x: -20 }}
               animate={isInView ? { opacity: 1, x: 0 } : {}}
               transition={{ duration: 0.8, delay: 0.5, ease: [0.25, 0.1, 0.25, 1.0] }}
             >
-              Closing The Gap!
+              {hero?.subtitle}
             </motion.span>
           </motion.h1>
-          
-          <motion.p 
-            className="text-base sm:text-lg md:text-xl lg:text-2xl text-white/80 mb-6 sm:mb-8 max-w-2xl sm:max-w-3xl mx-auto"
-            variants={itemVariants}
-          >
-            {hero.subtitle}
-          </motion.p>
           
           <motion.div 
             className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center mb-8 sm:mb-12"
@@ -119,7 +124,7 @@ const Hero = () => {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.98 }}
             >
-              <span>{hero.ctaPrimary}</span>
+              <span>{hero?.primaryCtaText}</span>
               <ArrowRight className="h-4 sm:h-5 w-4 sm:w-5 group-hover:translate-x-2 transition-transform duration-300" />
             </motion.button>
             
@@ -128,7 +133,7 @@ const Hero = () => {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.98 }}
             >
-              {hero.ctaSecondary}
+              {hero?.secondaryCtaText}
             </motion.button>
           </motion.div>
           
@@ -136,7 +141,7 @@ const Hero = () => {
             className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 sm:gap-8 max-w-2xl sm:max-w-3xl mx-auto"
             variants={itemVariants}
           >
-            {hero.stats.map((stat, index) => (
+            {statsArray.map((stat: any, index: number) => (
               <motion.div 
                 key={index} 
                 className="text-center"

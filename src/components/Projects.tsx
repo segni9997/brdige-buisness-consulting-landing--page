@@ -1,71 +1,29 @@
 import { motion, useInView } from 'framer-motion';
-import { useRef } from 'react';
+import React, { useRef } from 'react';
 import { TrendingUp, Users, DollarSign, Clock, ArrowRight } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { useGetSuccessStoriesQuery } from '../store/api';
 
 const Projects = () => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
   const navigate = useNavigate();
+  const { data: storiesData } = useGetSuccessStoriesQuery();
 
-  const projects = [
-    {
-      title: 'Global Manufacturing Optimization',
-      client: 'Fortune 500 Manufacturing Corp',
-      industry: 'Manufacturing',
-      duration: '8 months',
-      image: 'https://images.pexels.com/photos/1267338/pexels-photo-1267338.jpeg?auto=compress&cs=tinysrgb&w=800',
-      results: [
-        { metric: 'Cost Reduction', value: '35%', icon: <DollarSign className="h-5 w-5" /> },
-        { metric: 'Efficiency Gain', value: '50%', icon: <TrendingUp className="h-5 w-5" /> },
-        { metric: 'Employee Satisfaction', value: '40%', icon: <Users className="h-5 w-5" /> }
-      ],
-      description: 'Implemented lean manufacturing principles and digital automation across 12 facilities, resulting in significant cost savings and productivity improvements.',
-      gradient: 'from-primary-600 to-primary-800'
-    },
-    {
-      title: 'Digital Banking Transformation',
-      client: 'Regional Financial Institution',
-      industry: 'Financial Services',
-      duration: '12 months',
-      image: 'https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg?auto=compress&cs=tinysrgb&w=800',
-      results: [
-        { metric: 'Digital Adoption', value: '85%', icon: <TrendingUp className="h-5 w-5" /> },
-        { metric: 'Processing Time', value: '60%', icon: <Clock className="h-5 w-5" /> },
-        { metric: 'Customer Growth', value: '25%', icon: <Users className="h-5 w-5" /> }
-      ],
-      description: 'Led comprehensive digital transformation initiative, modernizing core banking systems and implementing AI-driven customer service solutions.',
-      gradient: 'from-accent-500 to-accent-600'
-    },
-    {
-      title: 'Healthcare System Restructuring',
-      client: 'Multi-State Healthcare Network',
-      industry: 'Healthcare',
-      duration: '10 months',
-      image: 'https://images.pexels.com/photos/3184339/pexels-photo-3184339.jpeg?auto=compress&cs=tinysrgb&w=800',
-      results: [
-        { metric: 'Patient Satisfaction', value: '45%', icon: <Users className="h-5 w-5" /> },
-        { metric: 'Operational Costs', value: '30%', icon: <DollarSign className="h-5 w-5" /> },
-        { metric: 'Wait Times', value: '55%', icon: <Clock className="h-5 w-5" /> }
-      ],
-      description: 'Redesigned patient care workflows and implemented integrated health information systems across 15 facilities.',
-      gradient: 'from-primary-700 to-accent-500'
-    },
-    {
-      title: 'Retail Chain Expansion Strategy',
-      client: 'National Retail Corporation',
-      industry: 'Retail',
-      duration: '6 months',
-      image: 'https://images.pexels.com/photos/3184360/pexels-photo-3184360.jpeg?auto=compress&cs=tinysrgb&w=800',
-      results: [
-        { metric: 'Market Expansion', value: '200%', icon: <TrendingUp className="h-5 w-5" /> },
-        { metric: 'Revenue Growth', value: '75%', icon: <DollarSign className="h-5 w-5" /> },
-        { metric: 'Store Efficiency', value: '40%', icon: <Users className="h-5 w-5" /> }
-      ],
-      description: 'Developed and executed strategic expansion plan, opening 50 new locations while optimizing supply chain and inventory management.',
-      gradient: 'from-accent-500 to-accent-700'
-    }
-  ];
+  const iconMap = {
+    DollarSign: DollarSign,
+    TrendingUp: TrendingUp,
+    Users: Users,
+    Clock: Clock,
+  };
+
+  const projects = storiesData?.results.map(story => ({
+    ...story,
+    results: story.results.map(result => ({
+      ...result,
+      icon: iconMap[result.icon as keyof typeof iconMap] ? React.createElement(iconMap[result.icon as keyof typeof iconMap], { className: "h-5 w-5" }) : <TrendingUp className="h-5 w-5" />,
+    })),
+  })) || [];
 
   return (
     <section id="projects" className="py-16 md:py-24 relative overflow-hidden bg-black/80">
@@ -173,11 +131,11 @@ const Projects = () => {
                   ))}
                 </div>
                 
-                <motion.button 
-                  className="flex items-center text-accent-400 font-semibold hover:scale-105 transition-all duration-300 group/btn"
-                  whileHover={{ x: 5 }}
-                  onClick={() => navigate(`/case-study/${index + 1}`)}
-                >
+                 <motion.button
+                   className="flex items-center text-accent-400 font-semibold hover:scale-105 transition-all duration-300 group/btn"
+                   whileHover={{ x: 5 }}
+                   onClick={() => navigate(`/case-study/${project.id}`)}
+                 >
                   View Case Study
                   <ArrowRight className="h-4 w-4 ml-2 group-hover/btn:translate-x-2 transition-transform duration-300 text-accent-400" />
                 </motion.button>

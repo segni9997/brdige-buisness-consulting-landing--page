@@ -1,11 +1,13 @@
 import React, { useState, useRef } from 'react';
 import { motion, useInView } from 'framer-motion';
 import { Mail, Phone, MapPin, Send, CheckCircle } from 'lucide-react';
+import { useCreateCommentMutation } from '../store/api';
 
 const Contact = () => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
 
+  const [createComment] = useCreateCommentMutation();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -21,11 +23,23 @@ const Contact = () => {
     });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsSubmitted(true);
-    setTimeout(() => setIsSubmitted(false), 3000);
-    setFormData({ name: '', email: '', company: '', message: '' });
+    try {
+      await createComment({
+        fullName: formData.name,
+        email: formData.email,
+        comment: formData.message,
+        Company: formData.company,
+        status: 'pending'
+      }).unwrap();
+      
+      setIsSubmitted(true);
+      setTimeout(() => setIsSubmitted(false), 3000);
+      setFormData({ name: '', email: '', company: '', message: '' });
+    } catch (err) {
+      console.error('Failed to send message:', err);
+    }
   };
 
   return (

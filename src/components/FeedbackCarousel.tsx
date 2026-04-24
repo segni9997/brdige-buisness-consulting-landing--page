@@ -1,140 +1,12 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronLeft, ChevronRight, X, Star, Quote } from 'lucide-react';
+import { useGetTestimonialsQuery } from '../store/api';
 
-interface Feedback {
-  id: number;
-  name: string;
-  role: string;
-  company: string;
-  image: string;
-  feedback: string;
-  rating: number;
-  industry: string;
-}
 
-const feedbacks: Feedback[] = [
-  {
-    id: 1,
-    name: 'Alexandra Williams',
-    role: 'CEO',
-    company: 'TechFlow Industries',
-    image: 'https://images.pexels.com/photos/1181690/pexels-photo-1181690.jpeg?auto=compress&cs=tinysrgb&w=150',
-    feedback: 'Bridge transformed our operations completely. Their strategic insights helped us reduce costs by 35% while improving customer satisfaction by 40%. The ROI has been exceptional.',
-    rating: 5,
-    industry: 'Technology'
-  },
-  {
-    id: 2,
-    name: 'Marcus Thompson',
-    role: 'COO',
-    company: 'Global Manufacturing Corp',
-    image: 'https://images.pexels.com/photos/1222271/pexels-photo-1222271.jpeg?auto=compress&cs=tinysrgb&w=150',
-    feedback: 'The team at Bridge brought fresh perspectives to our decades-old processes. Their implementation of lean methodologies resulted in a 50% improvement in production efficiency.',
-    rating: 5,
-    industry: 'Manufacturing'
-  },
-  {
-    id: 3,
-    name: 'Jennifer Davis',
-    role: 'Founder',
-    company: 'StartUp Innovations',
-    image: 'https://images.pexels.com/photos/1181686/pexels-photo-1181686.jpeg?auto=compress&cs=tinysrgb&w=150',
-    feedback: 'As a growing startup, we needed expert guidance on scaling our operations. Bridge provided invaluable strategic planning that helped us secure Series B funding and expand internationally.',
-    rating: 5,
-    industry: 'Technology'
-  },
-  {
-    id: 4,
-    name: 'Robert Chen',
-    role: 'President',
-    company: 'Financial Services Inc',
-    image: 'https://images.pexels.com/photos/1516680/pexels-photo-1516680.jpeg?auto=compress&cs=tinysrgb&w=150',
-    feedback: 'Their risk management expertise was crucial during our digital transformation. Bridge helped us navigate complex regulatory requirements while modernizing our entire technology stack.',
-    rating: 5,
-    industry: 'Finance'
-  },
-  {
-    id: 5,
-    name: 'Sarah Martinez',
-    role: 'VP of Operations',
-    company: 'HealthCare Plus',
-    image: 'https://images.pexels.com/photos/1181690/pexels-photo-1181690.jpeg?auto=compress&cs=tinysrgb&w=150',
-    feedback: 'The improvements in patient care efficiency have been remarkable. Our staff is happier, and patients are receiving better care faster. Bridge truly understands healthcare operations.',
-    rating: 5,
-    industry: 'Healthcare'
-  },
-  {
-    id: 6,
-    name: 'David Wilson',
-    role: 'CTO',
-    company: 'CloudTech Solutions',
-    image: 'https://images.pexels.com/photos/1222271/pexels-photo-1222271.jpeg?auto=compress&cs=tinysrgb&w=150',
-    feedback: 'Working with Bridge was a game-changer for our company. Their technical expertise combined with business acumen helped us achieve milestones we never thought possible.',
-    rating: 5,
-    industry: 'Technology'
-  },
-  {
-    id: 7,
-    name: 'Emily Johnson',
-    role: 'Director',
-    company: 'Retail Dreams Inc',
-    image: 'https://images.pexels.com/photos/1181686/pexels-photo-1181686.jpeg?auto=compress&cs=tinysrgb&w=150',
-    feedback: 'Our expansion strategy executed flawlessly thanks to Bridge. They helped us grow from 10 to 50 locations while maintaining our brand quality and customer satisfaction.',
-    rating: 5,
-    industry: 'Retail'
-  },
-  {
-    id: 8,
-    name: 'Michael Brown',
-    role: 'CEO',
-    company: 'EnergyCorp',
-    image: 'https://images.pexels.com/photos/1516680/pexels-photo-1516680.jpeg?auto=compress&cs=tinysrgb&w=150',
-    feedback: 'Bridge helped us transition to sustainable energy practices while improving our bottom line. Their strategic approach made our sustainability goals achievable and profitable.',
-    rating: 5,
-    industry: 'Energy'
-  },
-  {
-    id: 9,
-    name: 'Lisa Anderson',
-    role: 'Managing Director',
-    company: 'Global Logistics',
-    image: 'https://images.pexels.com/photos/1181690/pexels-photo-1181690.jpeg?auto=compress&cs=tinysrgb&w=150',
-    feedback: 'Our supply chain efficiency increased by 60% after working with Bridge. Their data-driven approach and innovative solutions transformed our entire operation.',
-    rating: 5,
-    industry: 'Logistics'
-  },
-  {
-    id: 10,
-    name: 'James Taylor',
-    role: 'CEO',
-    company: 'Food & Beverage Co',
-    image: 'https://images.pexels.com/photos/1222271/pexels-photo-1222271.jpeg?auto=compress&cs=tinysrgb&w=150',
-    feedback: 'The transformation in our operations was incredible. Customer satisfaction scores doubled, and we\'ve become the leading brand in our region thanks to Bridge\'s guidance.',
-    rating: 5,
-    industry: 'Food & Beverage'
-  },
-  {
-    id: 11,
-    name: 'Amanda White',
-    role: 'COO',
-    company: 'EduTech Learning',
-    image: 'https://images.pexels.com/photos/1181686/pexels-photo-1181686.jpeg?auto=compress&cs=tinysrgb&w=150',
-    feedback: 'Student engagement increased dramatically after implementing Bridge\'s recommendations. Their understanding of both technology and educational best practices is unmatched.',
-    rating: 5,
-    industry: 'Education'
-  },
-  {
-    id: 12,
-    name: 'Christopher Lee',
-    role: 'VP Strategy',
-    company: 'Realty Group',
-    image: 'https://images.pexels.com/photos/1516680/pexels-photo-1516680.jpeg?auto=compress&cs=tinysrgb&w=150',
-    feedback: 'Our development projects are now completed 25% faster and 20% under budget. Bridge\'s project management expertise has been invaluable to our growth.',
-    rating: 5,
-    industry: 'Real Estate'
-  }
-];
+
+// Feedback data will be fetched from backend via useGetTestimonialsQuery
+// const feedbacks: Feedback[] = [
 
 const FeedbackCarousel = () => {
   const [selectedId, setSelectedId] = useState<number | null>(null);
@@ -142,8 +14,12 @@ const FeedbackCarousel = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const intervalRef = useRef<number | null>(null);
   const carouselRef = useRef<HTMLDivElement>(null);
+  const { data: feedbacks } = useGetTestimonialsQuery()
+  console.log("Testimonals client side", feedbacks)
 
-  const duplicatedFeedbacks = [...feedbacks, ...feedbacks, ...feedbacks];
+const duplicatedFeedbacks = feedbacks?.testimonials
+  ? [...feedbacks.testimonials, ...feedbacks.testimonials]
+  : [];
 
   const startAutoScroll = useCallback(() => {
     if (intervalRef.current) return;
@@ -183,7 +59,7 @@ const FeedbackCarousel = () => {
     stopAutoScroll();
   };
 
-  const selectedFeedback = feedbacks.find(f => f.id === selectedId);
+  const selectedFeedback = feedbacks?.testimonials.find(f => f.id === selectedId) || null;
 
   return (
     <div className="relative w-full overflow-hidden bg-black py-16 md:py-24">
@@ -225,13 +101,13 @@ const FeedbackCarousel = () => {
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.2 }}
           >
-            Client Stories
+           {feedbacks?.sectionSubtitle || " Client Stories"}
           </motion.span>
           <h2 className="text-3xl md:text-4xl md:text-5xl font-bold text-white mb-4" style={{ fontFamily: 'var(--font-heading)' }}>
-            What Our Clients Say
+           {feedbacks?.sectionTitle || "What Our Clients Say"}
           </h2>
           <p className="text-lg md:text-xl text-white/70 max-w-3xl mx-auto">
-            Real stories from real clients who've transformed their businesses with Bridge.
+             {feedbacks?.description || "Discover how we've helped businesses like yours achieve success through our expert consulting services."}
           </p>
         </motion.div>
       </div>
@@ -276,14 +152,14 @@ const FeedbackCarousel = () => {
               <motion.div
                 key={`${feedback.id}-${index}`}
                 className="flex-shrink-0 w-72 md:w-80 cursor-pointer"
-                onClick={() => handleCardClick(feedback.id)}
+                onClick={() => handleCardClick(feedback.id || 0)}
                 whileHover={{ scale: 1.02, y: -5 }}
                 transition={{ duration: 0.3 }}
               >
                 <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-5 md:p-6 h-full hover:border-accent-500/30 transition-all duration-300">
                   <div className="flex items-start gap-3 mb-3 md:mb-4">
                     <motion.img
-                      src={feedback.image}
+                      src={feedback.imageUrl}
                       alt={feedback.name}
                       className="w-10 h-10 md:w-12 md:h-12 rounded-xl"
                       whileHover={{ scale: 1.1 }}
@@ -303,11 +179,11 @@ const FeedbackCarousel = () => {
                   </div>
                   
                   <p className="text-white/70 text-xs md:text-sm leading-relaxed line-clamp-3">
-                    "{feedback.feedback}"
+                    "{feedback.testimonial}"
                   </p>
                   
                   <div className="mt-3 md:mt-4 pt-3 border-t border-white/10">
-                    <span className="text-accent-400 text-xs md:text-sm font-medium">{feedback.industry}</span>
+                    <span className="text-accent-400 text-xs md:text-sm font-medium">{feedback.company}</span>
                   </div>
                 </div>
               </motion.div>
@@ -317,7 +193,7 @@ const FeedbackCarousel = () => {
       </div>
 
       <div className="relative z-10 flex justify-center gap-2 mt-6 md:mt-8">
-        {feedbacks.map((_, index) => (
+        {feedbacks?.testimonials.map((_, index) => (
           <button
             key={index}
             onClick={() => {
@@ -326,7 +202,7 @@ const FeedbackCarousel = () => {
               stopAutoScroll();
             }}
             className={`w-2 h-2 md:h-3 md:w-3 rounded-full transition-all duration-300 ${
-              currentIndex % feedbacks.length === index 
+              currentIndex % feedbacks?.testimonials.length === index 
                 ? 'bg-accent-500 w-6 md:w-8' 
                 : 'bg-white/30 hover:bg-white/50'
             }`}
@@ -388,7 +264,7 @@ const FeedbackCarousel = () => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.3 }}
               >
-                "{selectedFeedback.feedback}"
+                "{selectedFeedback.testimonial}"
               </motion.p>
               
               <motion.div 
@@ -398,7 +274,7 @@ const FeedbackCarousel = () => {
                 transition={{ delay: 0.5 }}
               >
                 <motion.img
-                  src={selectedFeedback.image}
+                  src={selectedFeedback.imageUrl}
                   alt={selectedFeedback.name}
                   className="w-16 h-16 md:w-20 md:h-20 rounded-2xl mr-4 md:mr-6"
                   whileHover={{ scale: 1.1 }}
@@ -410,7 +286,7 @@ const FeedbackCarousel = () => {
                   <p className="text-gray-600 text-sm md:text-base">
                     {selectedFeedback.role}, {selectedFeedback.company}
                   </p>
-                  <span className="text-accent-500 text-sm font-medium">{selectedFeedback.industry}</span>
+                  <span className="text-accent-500 text-sm font-medium">{selectedFeedback.company}</span>
                 </div>
               </motion.div>
             </motion.div>

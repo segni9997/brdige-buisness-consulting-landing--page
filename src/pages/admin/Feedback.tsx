@@ -1,39 +1,26 @@
 import { useState } from 'react';
 import { Plus, Search, Filter, Trash2, Edit, Star, Clock, X, Check } from 'lucide-react';
 
-interface Feedback {
-  id: number;
-  name: string;
-  email: string;
-  message: string;
-  rating: number;
-  date: string;
-  status: 'new' | 'read' | 'replied';
-}
-
-const initialFeedback: Feedback[] = [
-  { id: 1, name: 'John Doe', email: 'john@example.com', message: 'Excellent service! The team was very professional and helped our business grow significantly.', rating: 5, date: '2024-01-15', status: 'new' },
-  { id: 2, name: 'Sarah Smith', email: 'sarah@example.com', message: 'Great consultation experience. Highly recommended for strategic planning.', rating: 5, date: '2024-01-14', status: 'read' },
-  { id: 3, name: 'Mike Johnson', email: 'mike@example.com', message: 'Good overall experience. Response time could be improved.', rating: 3, date: '2024-01-13', status: 'replied' },
-  { id: 4, name: 'Emily Brown', email: 'emily@example.com', message: 'Outstanding strategic planning support. Very detailed analysis.', rating: 5, date: '2024-01-12', status: 'new' },
-  { id: 5, name: 'David Lee', email: 'david@example.com', message: 'Decent service, but expected more personalized attention.', rating: 3, date: '2024-01-11', status: 'read' },
-];
+import { useGetFeedbackQuery, useUpdateFeedbackMutation, useCreateFeedbackMutation, useDeleteFeedbackMutation, type TFeedback } from '../../store/api';
 
 export default function Feedback() {
-  const [feedbackList, setFeedbackList] = useState<Feedback[]>(initialFeedback);
+  const { data: feedbackList = [] } = useGetFeedbackQuery();
+  const [updateFeedback] = useUpdateFeedbackMutation();
+  const [createFeedback] = useCreateFeedbackMutation();
+  const [deleteFeedback] = useDeleteFeedbackMutation();
   const [showModal, setShowModal] = useState(false);
   const [modalMode, setModalMode] = useState<'add' | 'edit'>('add');
   const [searchTerm, setSearchTerm] = useState('');
   const [filterStatus, setFilterStatus] = useState<string>('all');
   
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<Partial<TFeedback>>({
     id: 0,
     name: '',
     email: '',
     message: '',
     rating: 5,
-    status: 'new' as Feedback['status'],
-    date: '',
+    status: 'new',
+    createdAt: '',
   });
 
   const openAddModal = () => {
@@ -44,38 +31,37 @@ export default function Feedback() {
       message: '',
       rating: 5,
       status: 'new',
-      date: new Date().toISOString().split('T')[0],
+      createdAt: new Date().toISOString().split('T')[0],
     });
     setModalMode('add');
     setShowModal(true);
   };
 
-  const openEditModal = (feedback: Feedback) => {
+  const openEditModal = (feedback: TFeedback) => {
     setFormData({ ...feedback });
     setModalMode('edit');
     setShowModal(true);
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (modalMode === 'add') {
-      const newFeedback: Feedback = {
+      const newFeedback = {
         ...formData,
-        id: Date.now(),
-        date: new Date().toISOString().split('T')[0],
+        createdAt: new Date().toISOString().split('T')[0],
       };
-      setFeedbackList([newFeedback, ...feedbackList]);
+      await createFeedback(newFeedback);
     } else {
-      setFeedbackList(feedbackList.map(f => f.id === formData.id ? formData : f));
+      await updateFeedback(formData as TFeedback);
     }
     setShowModal(false);
   };
 
-  const handleDelete = (id: number) => {
-    setFeedbackList(feedbackList.filter(f => f.id !== id));
+  const handleDelete = async (id: number) => {
+    await deleteFeedback(id);
   };
 
-  const handleStatusChange = (id: number, status: Feedback['status']) => {
-    setFeedbackList(feedbackList.map(f => f.id === id ? { ...f, status } : f));
+  const handleStatusChange = async (feedback: TFeedback, status: TFeedback['status']) => {
+    await updateFeedback({ ...feedback, status });
   };
 
   const filteredFeedback = feedbackList.filter(f => {
@@ -170,12 +156,12 @@ export default function Feedback() {
               <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
                 <div className="flex items-center gap-2 text-slate-500 text-xs sm:text-sm">
                   <Clock className="w-3 h-3 sm:w-4 sm:h-4" />
-                  {feedback.date}
+                  {feedback.createdAt ? new Date(feedback.createdAt).toLocaleDateString() : ''}
                 </div>
                 <div className="flex items-center gap-2">
                   <select
                     value={feedback.status}
-                    onChange={(e) => handleStatusChange(feedback.id, e.target.value as Feedback['status'])}
+                    onChange={(e) => handleStatusChange(feedback, e.target.value as TFeedback['status'])}
                     className="px-2 py-1.5 bg-[#262e49]/50 border border-[#3f4d7f]/30 rounded-lg text-white text-xs sm:text-sm focus:outline-none"
                   >
                     <option value="new">New</option>
@@ -249,7 +235,7 @@ export default function Feedback() {
                       className="p-0.5"
                     >
                       <Star
-                        className={`w-6 sm:w-8 h-6 sm:h-8 ${star <= formData.rating ? 'text-yellow-400 fill-yellow-400' : 'text-slate-600'}`}
+                        className={`w-6 sm:w-8 h-6 sm:h-8 ${star <= (formData.rating || 0) ? 'text-yellow-400 fill-yellow-400' : 'text-slate-600'}`}
                       />
                     </button>
                   ))}
@@ -259,7 +245,7 @@ export default function Feedback() {
                 <label className="block text-sm font-medium text-slate-300 mb-2">Status</label>
                 <select
                   value={formData.status}
-                  onChange={(e) => setFormData({ ...formData, status: e.target.value as Feedback['status'] })}
+                  onChange={(e) => setFormData({ ...formData, status: e.target.value as TFeedback['status'] })}
                   className="w-full px-3 sm:px-4 py-2.5 sm:py-3 bg-[#191f2f]/50 border border-[#3f4d7f]/30 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-[#3f4d7f] text-sm sm:text-base"
                 >
                   <option value="new">New</option>
