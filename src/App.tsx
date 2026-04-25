@@ -10,6 +10,7 @@ import Projects from './components/Projects';
 import FeedbackCarousel from './components/FeedbackCarousel';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
+import Testimonials from './components/Testimonials';
 
 function App() {
   useEffect(() => {
@@ -35,6 +36,7 @@ function App() {
       <Projects />
       {/* <Team /> */}
       <FeedbackCarousel />
+      <Testimonials/>
       <Contact />
       <Footer />
     </div>

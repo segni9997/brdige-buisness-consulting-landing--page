@@ -1,6 +1,14 @@
 import { useState, useEffect } from 'react';
 import { Plus, Trash2, Edit, X, Check, Image, Star, Quote } from 'lucide-react';
-import { useGetTestimonialsQuery, useUpdateTestimonialsMutation, type TTestimonialSection, type TTestimonial } from '../../store/api';
+import { 
+  useGetTestimonialsQuery, 
+  useUpdateTestimonialsMutation, 
+  useCreateTestimonialMutation,
+  useUpdateTestimonialMutation,
+  useDeleteTestimonialMutation,
+  type TTestimonialSection, 
+  type TTestimonial 
+} from '../../store/api';
 
 const gradientOptions = [
   { value: 'from-accent-500 to-accent-600', label: 'Accent Glow' },
@@ -12,6 +20,10 @@ const gradientOptions = [
 export default function TestimonialsManagement() {
   const { data: testimonialsData } = useGetTestimonialsQuery();
   const [updateSection] = useUpdateTestimonialsMutation();
+  const [createTestimonial] = useCreateTestimonialMutation();
+  const [updateTestimonial] = useUpdateTestimonialMutation();
+  const [deleteTestimonial] = useDeleteTestimonialMutation();
+
   const [showModal, setShowModal] = useState(false);
   const [showItemModal, setShowItemModal] = useState(false);
   const [modalMode, setModalMode] = useState<'edit' | 'add'>('edit');
@@ -36,13 +48,11 @@ export default function TestimonialsManagement() {
   const handleItemSubmit = async () => {
     if (!editingItem) return;
     try {
-      let updatedTestimonials;
       if (modalMode === 'add') {
-        updatedTestimonials = [...formData.testimonials, { ...editingItem, id: Date.now() }];
+        await createTestimonial({ ...editingItem, section: formData.id }).unwrap();
       } else {
-        updatedTestimonials = formData.testimonials.map(t => t.id === editingItem.id ? editingItem : t);
+        await updateTestimonial({ ...editingItem, section: formData.id }).unwrap();
       }
-      await updateSection({ ...formData, testimonials: updatedTestimonials }).unwrap();
       setShowItemModal(false);
     } catch (err) {
       console.error('Failed to save testimonial:', err);
@@ -72,8 +82,11 @@ export default function TestimonialsManagement() {
 
   const handleDeleteItem = async (id: number) => {
     if (confirm('Delete this testimonial?')) {
-      const updated = formData.testimonials.filter(t => t.id !== id);
-      await updateSection({ ...formData, testimonials: updated }).unwrap();
+      try {
+        await deleteTestimonial(id).unwrap();
+      } catch (err) {
+        console.error('Failed to delete testimonial:', err);
+      }
     }
   };
 
@@ -177,10 +190,11 @@ export default function TestimonialsManagement() {
               </div>
               <div>
                 <label className="block text-xs font-bold text-slate-400 uppercase mb-2">Description</label>
-                <textarea
+                <input
+                  type="text"
                   value={formData.description}
                   onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                  className="w-full px-4 py-3 bg-[#131926] border border-[#3f4d7f]/30 rounded-xl text-white text-sm h-32 resize-none focus:border-accent-500/50 outline-none"
+                  className="w-full px-4 py-3 bg-[#131926] border border-[#3f4d7f]/30 rounded-xl text-white text-sm focus:border-accent-500/50 outline-none"
                 />
               </div>
             </div>

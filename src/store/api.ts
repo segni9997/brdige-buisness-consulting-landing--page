@@ -72,6 +72,7 @@ export interface TTestimonial {
   testimonial: string;
   rating: number;
   gradient: string;
+  section?: number;
 }
 
 export interface TTestimonialSection {
@@ -385,6 +386,47 @@ export const api = createApi({
       }),
       invalidatesTags: ['Testimonials'],
     }),
+    createTestimonial: builder.mutation<TTestimonial, Partial<TTestimonial>>({
+      query: (content) => ({
+        url: 'testimonials/',
+        method: 'POST',
+        body: {
+          section: content.section,
+          name: content.name,
+          role: content.role,
+          company: content.company,
+          image_url: content.imageUrl,
+          testimonial: content.testimonial,
+          rating: content.rating,
+          gradient: content.gradient,
+        }
+      }),
+      invalidatesTags: ['Testimonials'],
+    }),
+    updateTestimonial: builder.mutation<void, TTestimonial>({
+      query: (content) => ({
+        url: `testimonials/${content.id}/`,
+        method: 'PUT',
+        body: {
+          section: content.section,
+          name: content.name,
+          role: content.role,
+          company: content.company,
+          image_url: content.imageUrl,
+          testimonial: content.testimonial,
+          rating: content.rating,
+          gradient: content.gradient,
+        }
+      }),
+      invalidatesTags: ['Testimonials'],
+    }),
+    deleteTestimonial: builder.mutation<void, number>({
+      query: (id) => ({
+        url: `testimonials/${id}/`,
+        method: 'DELETE',
+      }),
+      invalidatesTags: ['Testimonials'],
+    }),
 
     // BLOGS
     getStories: builder.query<TBlog[], void>({
@@ -641,4 +683,7 @@ export const {
   useCreateHowItWorksStepMutation,
   useUpdateHowItWorksStepMutation,
   useDeleteHowItWorksStepMutation,
+  useCreateTestimonialMutation,
+  useUpdateTestimonialMutation,
+  useDeleteTestimonialMutation,
 } = api;

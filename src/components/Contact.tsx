@@ -108,22 +108,22 @@ const Contact = () => {
                 {
                   icon: <Phone className="h-5 md:h-6 w-5 md:w-6 text-white" />,
                   title: 'Phone',
-                  info: '+1 (555) 123-4567',
-                  subInfo: 'Mon-Fri 9AM-6PM EST',
+                  info: '+251911331382/+251929135812',
+                  // subInfo: 'Mon-Fri 9AM-6PM ET',
                   gradient: 'from-accent-500 to-accent-600'
                 },
                 {
                   icon: <Mail className="h-5 md:h-6 w-5 md:w-6 text-white" />,
                   title: 'Email',
-                  info: 'contact@bridgeconsultancy.com',
+                  info: 'info@bridge-consulting.org',
                   subInfo: "We'll respond within 24 hours",
                   gradient: 'from-primary-500 to-primary-600'
                 },
                 {
                   icon: <MapPin className="h-5 md:h-6 w-5 md:w-6 text-white" />,
                   title: 'Office',
-                  info: '123 Business District',
-                  subInfo: 'New York, NY 10001',
+                  info: 'Sar Bet, Addis Ababa , Ethiopia',
+                  subInfo: 'Berhe Building, 2nd  Floor, Office No. 2005',
                   gradient: 'from-accent-600 to-accent-700'
                 }
               ].map((contact, index) => (
@@ -166,7 +166,7 @@ const Contact = () => {
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.98 }}
               >
-                Book Now
+                send a message using the form below
               </motion.button>
             </motion.div>
           </motion.div>
