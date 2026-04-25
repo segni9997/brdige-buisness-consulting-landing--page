@@ -15,6 +15,7 @@ import CaseStudyDetail from './pages/CaseStudyDetail';
 import AllCaseStudies from './pages/AllCaseStudies';
 import Layout from './components/Layout';
 import StoriesManagement from './pages/admin/StoriesManagement';
+import NotFound from './pages/NotFound';
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -46,6 +47,7 @@ function Router() {
           <Route path="how-it-works" element={<HowItWorksManagement />} />
           <Route path="testimonials" element={<TestimonialsManagement />} />
         </Route>
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>
   );
