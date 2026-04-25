@@ -90,9 +90,9 @@ const Footer = () => {
             <h3 className="text-base md:text-lg font-semibold mb-4 md:mb-6" style={{ fontFamily: 'var(--font-heading)' }}>Contact Info</h3>
             <div className="space-y-3 md:space-y-4 text-white/60 text-sm md:text-base">
               {[
-                { icon: <Phone className="h-4 w-4" />, text: '+1 (555) 123-4567', label: 'Phone' },
-                { icon: <Mail className="h-4 w-4" />, text: 'contact@bridgeconsultancy.com', label: 'Email' },
-                { icon: <MapPin className="h-4 w-4" />, text: '123 Business District, New York, NY 10001', label: 'Office' }
+                { icon: <Phone className="h-4 w-4" />, text: '+251911331382 / +251929135812', label: 'Phone' },
+                { icon: <Mail className="h-4 w-4" />, text: 'info@bridge-consulting.org', label: 'Email' },
+                { icon: <MapPin className="h-4 w-4" />, text: 'Sar Bet, Addis Ababa, Ethiopia ,Bahre Building 2nd Floor, office N0.2005', label: 'Office' }
               ].map((contact, index) => (
                 <motion.div 
                   key={index}

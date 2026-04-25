@@ -145,6 +145,14 @@ export interface TStory {
   created_at: string;
 }
 
+export interface TUser {
+  id?: number;
+  username: string;
+  email: string;
+  password?: string;
+  is_admin_user: boolean;
+}
+
 export const api = createApi({
   reducerPath: 'api',
   baseQuery: fetchBaseQuery({ 
@@ -152,12 +160,12 @@ export const api = createApi({
     prepareHeaders: (headers) => {
       const token = localStorage.getItem('access_token');
       if (token) {
-        headers.set('Authorization', `Bearer ${token}`);
+        headers.set('authorization', `Bearer ${token}`);
       }
       return headers;
-    }
+    },
   }),
-  tagTypes: ['Hero', 'About', 'Services', 'HowItWorks', 'Testimonials', 'Stories', 'Feedback', 'Comments', 'SuccessStories', 'StoryResults'],
+  tagTypes: ['Hero', 'About', 'Services', 'HowItWorks', 'Testimonials', 'Stories', 'Feedback', 'Comments', 'SuccessStories', 'StoryResults', 'Users'],
   endpoints: (builder) => ({
     login: builder.mutation<any, {username:string, password:string}>({
       query: (credentials) => ({
@@ -634,6 +642,36 @@ export const api = createApi({
       }),
       invalidatesTags: ['Comments'],
     }),
+    
+    // USERS
+    getUsers: builder.query<TUser[], void>({
+      query: () => 'auth/users/',
+      transformResponse: (response: {results: TUser[]}) => response.results || [],
+      providesTags: ['Users'],
+    }),
+    createUser: builder.mutation<TUser, Partial<TUser>>({
+      query: (content) => ({
+        url: 'auth/users/',
+        method: 'POST',
+        body: content,
+      }),
+      invalidatesTags: ['Users'],
+    }),
+    updateUser: builder.mutation<TUser, TUser>({
+      query: (content) => ({
+        url: `auth/users/${content.id}/`,
+        method: 'PUT',
+        body: content,
+      }),
+      invalidatesTags: ['Users'],
+    }),
+    deleteUser: builder.mutation<void, number>({
+      query: (id) => ({
+        url: `auth/users/${id}/`,
+        method: 'DELETE',
+      }),
+      invalidatesTags: ['Users'],
+    }),
   })
 });
 
@@ -686,4 +724,8 @@ export const {
   useCreateTestimonialMutation,
   useUpdateTestimonialMutation,
   useDeleteTestimonialMutation,
+  useGetUsersQuery,
+  useCreateUserMutation,
+  useUpdateUserMutation,
+  useDeleteUserMutation,
 } = api;

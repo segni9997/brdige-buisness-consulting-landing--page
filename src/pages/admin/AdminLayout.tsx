@@ -13,6 +13,7 @@ import {
   Info,
   Settings,
   Layers,
+  Users,
 } from 'lucide-react';
 
 const navItems = [
@@ -25,7 +26,7 @@ const navItems = [
   // { path: '/admin/dashboard/feedback', label: 'Feedback', icon: MessageSquare },
   { path: '/admin/dashboard/comments', label: 'Comments', icon: MessageCircle },
   { path: '/admin/dashboard/stories', label: 'Stories', icon: BookOpen },
-
+  { path: '/admin/dashboard/users', label: 'Users', icon: Users },
 ];
 
 export default function AdminLayout() {
