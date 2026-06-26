@@ -1,13 +1,26 @@
 import { motion, useInView } from 'framer-motion';
 import { useRef } from 'react';
-import { Mail, Phone, MapPin, Linkedin, Twitter, Facebook } from 'lucide-react';
+import { Mail, Phone, MapPin, Linkedin, Twitter, Facebook, Instagram, Youtube, Github } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { useGetSocialLinksQuery } from '../store/api';
+
+const iconMap: Record<string, React.ReactNode> = {
+  linkedin:  <Linkedin className="h-5 w-5 md:h-6 md:w-6" />,
+  twitter:   <Twitter className="h-5 w-5 md:h-6 md:w-6" />,
+  facebook:  <Facebook className="h-5 w-5 md:h-6 md:w-6" />,
+  instagram: <Instagram className="h-5 w-5 md:h-6 md:w-6" />,
+  youtube:   <Youtube className="h-5 w-5 md:h-6 md:w-6" />,
+  github:    <Github className="h-5 w-5 md:h-6 md:w-6" />,
+  // tiktok and telegram don't have lucide icons, fallback to text
+};
 
 const Footer = () => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "0px" });
+  const { data: socialLinks } = useGetSocialLinksQuery();
 
   return (
-    <footer className="bg-black/80 text-white">
+    <footer className="bg-black/80 text-white" ref={ref}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
           <motion.div 
@@ -17,11 +30,6 @@ const Footer = () => {
             transition={{ duration: 0.6 }}
           >
             <div className="flex items-center space-x-3 mb-4 md:mb-6">
-              {/* <img 
-                src="/logoonly.png" 
-                alt="Bridge Management Consultancy" 
-                className="h-8 w-auto md:h-10"
-              /> */}
               <span className="text-xl md:text-2xl font-bold tracking-wide" style={{ fontFamily: 'var(--font-heading)' }}>BRIDGE</span>
             </div>
             <p className="text-white/60 mb-4 md:mb-6 leading-relaxed text-sm md:text-base">
@@ -29,20 +37,40 @@ const Footer = () => {
               Your success is our mission - Closing The Gap!
             </p>
             <div className="flex space-x-3 md:space-x-4">
-              {[
-                { icon: <Linkedin className="h-5 w-5 md:h-6 md:w-6" />, href: '#' },
-                { icon: <Twitter className="h-5 w-5 md:h-6 md:w-6" />, href: '#' },
-                { icon: <Facebook className="h-5 w-5 md:h-6 md:w-6" />, href: '#' }
-              ].map((social, index) => (
-                <motion.a 
-                  key={index}
-                  href={social.href}
-                  className="text-white/50 hover:text-accent-400 transition-colors duration-200"
-                  whileHover={{ scale: 1.1, y: -2 }}
-                >
-                  {social.icon}
-                </motion.a>
-              ))}
+              {socialLinks && socialLinks.length > 0
+                ? socialLinks.map((social, index) => (
+                    <motion.a
+                      key={social.id ?? index}
+                      href={social.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label={social.label || social.icon}
+                      className="text-white/50 hover:text-accent-400 transition-colors duration-200"
+                      whileHover={{ scale: 1.1, y: -2 }}
+                    >
+                      {iconMap[social.icon] ?? (
+                        <span className="text-xs uppercase">{social.icon}</span>
+                      )}
+                    </motion.a>
+                  ))
+                : (
+                  // Fallback static icons while no data
+                  [
+                    { icon: <Linkedin className="h-5 w-5 md:h-6 md:w-6" />, href: '#' },
+                    { icon: <Twitter className="h-5 w-5 md:h-6 md:w-6" />, href: '#' },
+                    { icon: <Facebook className="h-5 w-5 md:h-6 md:w-6" />, href: '#' },
+                  ].map((social, index) => (
+                    <motion.a 
+                      key={index}
+                      href={social.href}
+                      className="text-white/50 hover:text-accent-400 transition-colors duration-200"
+                      whileHover={{ scale: 1.1, y: -2 }}
+                    >
+                      {social.icon}
+                    </motion.a>
+                  ))
+                )
+              }
             </div>
           </motion.div>
           
@@ -53,12 +81,18 @@ const Footer = () => {
           >
             <h3 className="text-base md:text-lg font-semibold mb-4 md:mb-6" style={{ fontFamily: 'var(--font-heading)' }}>Services</h3>
             <ul className="space-y-2 md:space-y-3 text-white/60 text-sm md:text-base">
-              {['Strategic Planning', 'Operations Optimization', 'Digital Transformation', 'Financial Advisory', 'Risk Management'].map((item, index) => (
+              {[
+                { label: 'Our Services', href: '/#services' },
+                { label: 'How It Works', href: '/#how-it-works' },
+                { label: 'Success Stories', href: '/case-studies' },
+                { label: 'Projects', href: '/#projects' },
+                { label: 'Contact Us', href: '/#contact' },
+              ].map((item, index) => (
                 <motion.li 
                   key={index}
                   whileHover={{ x: 5 }}
                 >
-                  <a href="#" className="hover:text-accent-400 transition-colors duration-200">{item}</a>
+                  <Link to={item.href} className="hover:text-accent-400 transition-colors duration-200">{item.label}</Link>
                 </motion.li>
               ))}
             </ul>
@@ -71,12 +105,18 @@ const Footer = () => {
           >
             <h3 className="text-base md:text-lg font-semibold mb-4 md:mb-6" style={{ fontFamily: 'var(--font-heading)' }}>Company</h3>
             <ul className="space-y-2 md:space-y-3 text-white/60 text-sm md:text-base">
-              {['About Us', 'Our Team', 'Careers', 'Case Studies', 'Blog'].map((item, index) => (
+              {[
+                { label: 'About Us', href: '/#about' },
+                { label: 'Case Studies', href: '/case-studies' },
+                { label: 'Testimonials', href: '/#testimonials' },
+                { label: 'Contact', href: '/#contact' },
+                { label: 'Admin Panel', href: '/admin/login' },
+              ].map((item, index) => (
                 <motion.li 
                   key={index}
                   whileHover={{ x: 5 }}
                 >
-                  <a href="#" className="hover:text-accent-400 transition-colors duration-200">{item}</a>
+                  <Link to={item.href} className="hover:text-accent-400 transition-colors duration-200">{item.label}</Link>
                 </motion.li>
               ))}
             </ul>

@@ -20,11 +20,23 @@ export interface TAboutUs {
   missionContent: string;
   visionTitle: string;
   visionContent: string;
+  valuesTitle: string;
+  valuesContent: string;
   yearsOfExcellence: number;
   companiesCountText: string;
   imageUrl: string;
   ctaTitle: string;
   ctaContent: string;
+}
+
+export interface TCarouselImage {
+  id: number;
+  title: string;
+  subtitle: string;
+  imageUrl: string;
+  order: number;
+  isActive: boolean;
+  createdAt?: string;
 }
 
 export interface TService {
@@ -153,10 +165,19 @@ export interface TUser {
   is_admin_user: boolean;
 }
 
+export interface TSocialLink {
+  id?: number;
+  icon: string;
+  url: string;
+  label: string;
+  order: number;
+  isActive: boolean;
+}
+
 export const api = createApi({
   reducerPath: 'api',
   baseQuery: fetchBaseQuery({ 
-    baseUrl: 'https://backend.bridge-consulting.org/api/',
+    baseUrl: 'http://127.0.0.1:8000/api/',
     prepareHeaders: (headers) => {
       const token = localStorage.getItem('access_token');
       if (token) {
@@ -165,13 +186,20 @@ export const api = createApi({
       return headers;
     },
   }),
-  tagTypes: ['Hero', 'About', 'Services', 'HowItWorks', 'Testimonials', 'Stories', 'Feedback', 'Comments', 'SuccessStories', 'StoryResults', 'Users'],
+  tagTypes: ['Hero', 'About', 'Services', 'HowItWorks', 'Testimonials', 'Stories', 'Feedback', 'Comments', 'SuccessStories', 'StoryResults', 'Users', 'CarouselImages', 'SocialLinks'],
   endpoints: (builder) => ({
     login: builder.mutation<any, {username:string, password:string}>({
       query: (credentials) => ({
         url: 'auth/login/',
         method: 'POST',
         body: credentials,
+      }),
+    }),
+    uploadImage: builder.mutation<{url: string}, FormData>({
+      query: (formData) => ({
+        url: 'upload/',
+        method: 'POST',
+        body: formData,
       }),
     }),
     
@@ -222,6 +250,8 @@ export const api = createApi({
           mission_content: content.missionContent,
           vision_title: content.visionTitle,
           vision_content: content.visionContent,
+          values_title: content.valuesTitle,
+          values_content: content.valuesContent,
           years_of_excellence: content.yearsOfExcellence,
           companies_count_text: content.companiesCountText,
           image_url: content.imageUrl,
@@ -672,6 +702,90 @@ export const api = createApi({
       }),
       invalidatesTags: ['Users'],
     }),
+
+    // CAROUSEL
+    getCarouselImages: builder.query<TCarouselImage[], void>({
+      query: () => 'carousel-images/',
+      transformResponse: (response: {results: TCarouselImage[]}) => response.results || [],
+      providesTags: ['CarouselImages'],
+    }),
+    createCarouselImage: builder.mutation<TCarouselImage, Partial<TCarouselImage>>({
+      query: (content) => ({
+        url: 'carousel-images/',
+        method: 'POST',
+        body: {
+          title: content.title,
+          subtitle: content.subtitle,
+          image_url: content.imageUrl,
+          order: content.order,
+          is_active: content.isActive,
+        }
+      }),
+      invalidatesTags: ['CarouselImages'],
+    }),
+    updateCarouselImage: builder.mutation<TCarouselImage, TCarouselImage>({
+      query: (content) => ({
+        url: `carousel-images/${content.id}/`,
+        method: 'PUT',
+        body: {
+          title: content.title,
+          subtitle: content.subtitle,
+          image_url: content.imageUrl,
+          order: content.order,
+          is_active: content.isActive,
+        }
+      }),
+      invalidatesTags: ['CarouselImages'],
+    }),
+    deleteCarouselImage: builder.mutation<void, number>({
+      query: (id) => ({
+        url: `carousel-images/${id}/`,
+        method: 'DELETE',
+      }),
+      invalidatesTags: ['CarouselImages'],
+    }),
+
+    // SOCIAL LINKS
+    getSocialLinks: builder.query<TSocialLink[], void>({
+      query: () => 'social-links/',
+      transformResponse: (response: { results: TSocialLink[] }) => response.results || [],
+      providesTags: ['SocialLinks'],
+    }),
+    createSocialLink: builder.mutation<TSocialLink, Partial<TSocialLink>>({
+      query: (content) => ({
+        url: 'social-links/',
+        method: 'POST',
+        body: {
+          icon: content.icon,
+          url: content.url,
+          label: content.label,
+          order: content.order,
+          is_active: content.isActive,
+        },
+      }),
+      invalidatesTags: ['SocialLinks'],
+    }),
+    updateSocialLink: builder.mutation<TSocialLink, TSocialLink>({
+      query: (content) => ({
+        url: `social-links/${content.id}/`,
+        method: 'PUT',
+        body: {
+          icon: content.icon,
+          url: content.url,
+          label: content.label,
+          order: content.order,
+          is_active: content.isActive,
+        },
+      }),
+      invalidatesTags: ['SocialLinks'],
+    }),
+    deleteSocialLink: builder.mutation<void, number>({
+      query: (id) => ({
+        url: `social-links/${id}/`,
+        method: 'DELETE',
+      }),
+      invalidatesTags: ['SocialLinks'],
+    }),
   })
 });
 
@@ -728,4 +842,13 @@ export const {
   useCreateUserMutation,
   useUpdateUserMutation,
   useDeleteUserMutation,
+  useUploadImageMutation,
+  useGetCarouselImagesQuery,
+  useCreateCarouselImageMutation,
+  useUpdateCarouselImageMutation,
+  useDeleteCarouselImageMutation,
+  useGetSocialLinksQuery,
+  useCreateSocialLinkMutation,
+  useUpdateSocialLinkMutation,
+  useDeleteSocialLinkMutation,
 } = api;

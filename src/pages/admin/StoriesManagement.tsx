@@ -9,7 +9,8 @@ import {
   type TStoryResult,
   useCreateStoryResultMutation,
   useUpdateStoryResultMutation,
-  useDeleteStoryResultMutation
+  useDeleteStoryResultMutation,
+  useUploadImageMutation
 } from '../../store/api';
 
 const gradientOptions = [
@@ -47,6 +48,8 @@ export default function StoriesManagement() {
   const [showModal, setShowModal] = useState(false);
   const [editingStory, setEditingStory] = useState<TStory | null>(null);
   const [deletedResultIds, setDeletedResultIds] = useState<number[]>([]);
+  const [uploadImage] = useUploadImageMutation();
+  const [isUploading, setIsUploading] = useState(false);
   
   const [formData, setFormData] = useState<Partial<TStory>>({
     title: '',
@@ -126,7 +129,25 @@ export default function StoriesManagement() {
 
       setShowModal(false);
     } catch (err) {
-      console.error('Failed to save story:', err);
+      console.error('Failed to save story', err);
+    }
+  };
+
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.files || e.target.files.length === 0) return;
+    const file = e.target.files[0];
+    const data = new FormData();
+    data.append('file', file);
+    data.append('folder', 'stories');
+    
+    setIsUploading(true);
+    try {
+      const res = await uploadImage(data).unwrap();
+      setFormData(prev => ({ ...prev, image: res.url }));
+    } catch (err) {
+      console.error('Upload failed', err);
+    } finally {
+      setIsUploading(false);
     }
   };
 
@@ -283,13 +304,21 @@ export default function StoriesManagement() {
                       onChange={(e) => setFormData({ ...formData, duration: e.target.value })}
                       className="w-full px-4 py-3 bg-[#131926] border border-[#3f4d7f]/30 rounded-xl text-white text-sm focus:border-accent-500/50 outline-none"
                     />
-                    <input
-                      type="text"
-                      placeholder="Image URL"
-                      value={formData.image}
-                      onChange={(e) => setFormData({ ...formData, image: e.target.value })}
-                      className="w-full px-4 py-3 bg-[#131926] border border-[#3f4d7f]/30 rounded-xl text-white text-sm focus:border-accent-500/50 outline-none"
-                    />
+                    <label className="block text-xs font-bold text-slate-400 uppercase tracking-widest">Image Upload</label>
+                    <div className="flex gap-2 items-center">
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={handleImageUpload}
+                        className="w-full px-4 py-3 bg-[#131926] border border-[#3f4d7f]/30 rounded-xl text-white text-sm focus:border-accent-500/50 outline-none file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-accent-500/20 file:text-accent-400 hover:file:bg-accent-500/30"
+                      />
+                      {isUploading && <span className="text-sm text-accent-400 flex items-center shrink-0">Uploading...</span>}
+                    </div>
+                    {formData.image && (
+                      <div className="mt-2">
+                        <img src={formData.image} alt="Preview" className="h-16 object-cover rounded-lg border border-[#3f4d7f]/30" />
+                      </div>
+                    )}
                   </div>
 
                   <div className="space-y-4">

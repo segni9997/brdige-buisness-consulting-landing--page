@@ -16,14 +16,18 @@ import AllCaseStudies from './pages/AllCaseStudies';
 import Layout from './components/Layout';
 import StoriesManagement from './pages/admin/StoriesManagement';
 import UserManagement from './pages/admin/UserManagement';
+import SocialLinksManagement from './pages/admin/SocialLinksManagement';
 import NotFound from './pages/NotFound';
 
 function ScrollToTop() {
-  const { pathname } = useLocation();
+  const { pathname, hash } = useLocation();
   useLayoutEffect(() => {
-    window.scrollTo(0, 0);
-    document.documentElement.scrollTop = 0;
-  }, [pathname]);
+    // If there's a hash, let the hash scroll handler in App.tsx handle it
+    if (!hash) {
+      window.scrollTo(0, 0);
+      document.documentElement.scrollTop = 0;
+    }
+  }, [pathname, hash]);
   return null;
 }
 
@@ -48,6 +52,7 @@ function Router() {
           <Route path="how-it-works" element={<HowItWorksManagement />} />
           <Route path="testimonials" element={<TestimonialsManagement />} />
           <Route path="users" element={<UserManagement />} />
+          <Route path="social-links" element={<SocialLinksManagement />} />
         </Route>
         <Route path="*" element={<NotFound />} />
       </Routes>

@@ -14,6 +14,7 @@ import {
   Settings,
   Layers,
   Users,
+  Share2,
 } from 'lucide-react';
 
 const navItems = [
@@ -27,6 +28,7 @@ const navItems = [
   { path: '/admin/dashboard/comments', label: 'Comments', icon: MessageCircle },
   { path: '/admin/dashboard/stories', label: 'Stories', icon: BookOpen },
   { path: '/admin/dashboard/users', label: 'Users', icon: Users },
+  { path: '/admin/dashboard/social-links', label: 'Social Links', icon: Share2 },
 ];
 
 export default function AdminLayout() {

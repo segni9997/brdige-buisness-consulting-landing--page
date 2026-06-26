@@ -1,38 +1,43 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { TrendingUp, Users, MessageSquare, BookOpen, ArrowUpRight, ArrowDownRight } from 'lucide-react';
-
-interface StatCard {
-  title: string;
-  value: string;
-  change: string;
-  trend: 'up' | 'down';
-  icon: React.ElementType;
-  color: string;
-}
-
-const stats: StatCard[] = [
-  { title: 'Total Feedback', value: '156', change: '+12%', trend: 'up', icon: MessageSquare, color: 'from-[#3f4d7f] to-[#3f4d7f]/80' },
-  { title: 'Total Comments', value: '89', change: '+8%', trend: 'up', icon: Users, color: 'from-[#3f4d7f]/80 to-[#3f4d7f]/60' },
-  { title: 'Stories Posted', value: '24', change: '+3%', trend: 'up', icon: BookOpen, color: 'from-[#bb0505] to-[#ee6969]' },
-  { title: 'New Messages', value: '12', change: '-2%', trend: 'down', icon: MessageSquare, color: 'from-[#ee6969] to-[#ff9494]' },
-];
-
-const recentFeedback = [
-  { id: 1, name: 'John Doe', message: 'Excellent service! Very professional team.', date: '2 hours ago', type: 'positive' },
-  { id: 2, name: 'Sarah Smith', message: 'Great consultation experience. Highly recommended!', date: '5 hours ago', type: 'positive' },
-  { id: 3, name: 'Mike Johnson', message: 'Could use some improvement in response time.', date: '1 day ago', type: 'neutral' },
-  { id: 4, name: 'Emily Brown', message: 'Outstanding strategic planning support.', date: '1 day ago', type: 'positive' },
-];
-
-const recentComments = [
-  { id: 1, user: 'Alex Thompson', content: 'This is exactly what we needed for our business.', post: 'Growth Strategies Article', time: '1 hour ago' },
-  { id: 2, user: 'Maria Garcia', content: 'Great insights on market trends!', post: '2024 Business Outlook', time: '3 hours ago' },
-  { id: 3, user: 'David Lee', content: 'Very helpful tips for small businesses.', post: 'Startup Guide', time: '6 hours ago' },
-];
+import { useGetFeedbackQuery, useGetCommentsQuery, useGetSuccessStoriesQuery } from '../../store/api';
 
 export default function AdminDashboard() {
   const navigate = useNavigate();
+  
+  const { data: feedbackData } = useGetFeedbackQuery();
+  const { data: commentsData } = useGetCommentsQuery();
+  const { data: storiesData } = useGetSuccessStoriesQuery();
+
+  const totalFeedback = feedbackData?.length || 0;
+  const totalComments = commentsData?.length || 0;
+  const totalStories = storiesData?.results?.length || 0;
+  const newMessages = feedbackData?.filter(f => f.status === 'new').length || 0;
+
+  const stats = [
+    { title: 'Total Feedback', value: totalFeedback.toString(), change: '+0%', trend: 'up', icon: MessageSquare, color: 'from-[#3f4d7f] to-[#3f4d7f]/80' },
+    { title: 'Total Comments', value: totalComments.toString(), change: '+0%', trend: 'up', icon: Users, color: 'from-[#3f4d7f]/80 to-[#3f4d7f]/60' },
+    { title: 'Stories Posted', value: totalStories.toString(), change: '+0%', trend: 'up', icon: BookOpen, color: 'from-[#bb0505] to-[#ee6969]' },
+    { title: 'New Messages', value: newMessages.toString(), change: '+0%', trend: 'up', icon: MessageSquare, color: 'from-[#ee6969] to-[#ff9494]' },
+  ];
+
+  const recentFeedback = feedbackData?.slice(0, 4).map(f => ({
+    id: f.id,
+    name: f.name,
+    message: f.message,
+    date: new Date(f.createdAt).toLocaleDateString(),
+    type: f.rating >= 4 ? 'positive' : f.rating <= 2 ? 'negative' : 'neutral'
+  })) || [];
+
+  const recentComments = commentsData?.slice(0, 3).map(c => ({
+    id: c.id,
+    user: c.fullName || 'Anonymous',
+    content: c.comment,
+    post: c.post ? `Post #${c.post}` : 'Unknown Post',
+    time: new Date(c.createdAt).toLocaleDateString()
+  })) || [];
+
   const [animatedStats, setAnimatedStats] = useState(stats.map(() => '0'));
 
   useEffect(() => {
@@ -40,7 +45,7 @@ export default function AdminDashboard() {
       setAnimatedStats(stats.map(s => s.value));
     }, 100);
     return () => clearTimeout(timer);
-  }, []);
+  }, [feedbackData, commentsData, storiesData]);
 
   return (
     <div className="space-y-6">
@@ -113,6 +118,7 @@ export default function AdminDashboard() {
                 <p className="text-slate-300 mt-2 sm:mt-3 text-xs sm:text-sm line-clamp-2">{item.message}</p>
               </div>
             ))}
+            {recentFeedback.length === 0 && <p className="text-slate-400 text-sm text-center py-4">No recent feedback</p>}
           </div>
         </div>
 
@@ -142,6 +148,7 @@ export default function AdminDashboard() {
                 <p className="text-[#3f4d7f] text-xs mt-2">On: {comment.post}</p>
               </div>
             ))}
+            {recentComments.length === 0 && <p className="text-slate-400 text-sm text-center py-4">No recent comments</p>}
           </div>
         </div>
       </div>

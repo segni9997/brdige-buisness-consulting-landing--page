@@ -1,12 +1,14 @@
 import { useState, useEffect } from 'react';
 import { X, Check, Eye as EyeIcon, Edit, Award, Target, Compass, Rocket } from 'lucide-react';
-import { useGetAboutQuery, useUpdateAboutMutation, type TAboutUs } from '../../store/api';
+import { useGetAboutQuery, useUpdateAboutMutation, useUploadImageMutation, type TAboutUs } from '../../store/api';
 
 export default function AboutManagement() {
   const { data: aboutData } = useGetAboutQuery();
   const [updateAboutMutation] = useUpdateAboutMutation();
+  const [uploadImageMutation] = useUploadImageMutation();
   const [showModal, setShowModal] = useState(false);
   const [formData, setFormData] = useState<TAboutUs | null>(null);
+  const [isUploading, setIsUploading] = useState(false);
 
   useEffect(() => {
     if (aboutData) setFormData(JSON.parse(JSON.stringify(aboutData)));
@@ -20,6 +22,24 @@ export default function AboutManagement() {
       setShowModal(false);
     } catch (err) {
       console.error('Failed to update about section:', err);
+    }
+  };
+
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.files || e.target.files.length === 0) return;
+    const file = e.target.files[0];
+    const data = new FormData();
+    data.append('file', file);
+    data.append('folder', 'about');
+    
+    setIsUploading(true);
+    try {
+      const res = await uploadImageMutation(data).unwrap();
+      setFormData(prev => prev ? { ...prev, imageUrl: res.url } : null);
+    } catch (err) {
+      console.error('Upload failed', err);
+    } finally {
+      setIsUploading(false);
     }
   };
 
@@ -195,12 +215,20 @@ export default function AboutManagement() {
                     <div className="space-y-4">
                       <div>
                         <label className="block text-xs font-bold text-slate-400 uppercase mb-2">Section Hero Image</label>
-                        <input
-                          type="url"
-                          value={formData.imageUrl}
-                          onChange={(e) => setFormData({ ...formData, imageUrl: e.target.value })}
-                          className="w-full px-4 py-3 bg-[#131926] border border-[#3f4d7f]/30 rounded-xl text-white text-sm focus:border-accent-500/50 outline-none transition-all"
-                        />
+                        <div className="flex gap-2">
+                          <input
+                            type="file"
+                            accept="image/*"
+                            onChange={handleImageUpload}
+                            className="w-full px-4 py-3 bg-[#131926] border border-[#3f4d7f]/30 rounded-xl text-white text-sm focus:border-accent-500/50 outline-none transition-all file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-accent-500/20 file:text-accent-400 hover:file:bg-accent-500/30"
+                          />
+                          {isUploading && <span className="text-sm text-accent-400 flex items-center">Uploading...</span>}
+                        </div>
+                        {formData.imageUrl && (
+                          <div className="mt-2">
+                            <img src={formData.imageUrl} alt="Preview" className="h-20 object-cover rounded-lg border border-[#3f4d7f]/30" />
+                          </div>
+                        )}
                       </div>
                       <div>
                         <label className="block text-xs font-bold text-slate-400 uppercase mb-2">CTA Headline</label>
@@ -261,6 +289,26 @@ export default function AboutManagement() {
                          <textarea
                            value={formData.visionContent}
                            onChange={(e) => setFormData({ ...formData, visionContent: e.target.value })}
+                           className="w-full px-4 py-3 bg-[#1e253a] border border-[#3f4d7f]/30 rounded-xl text-white text-sm h-32 resize-none focus:border-accent-500/50 outline-none transition-all"
+                         />
+                       </div>
+                    </div>
+
+                    <div className="bg-[#131926] p-6 rounded-3xl border border-[#3f4d7f]/30 space-y-4 md:col-span-2">
+                       <div>
+                         <label className="block text-xs font-bold text-slate-500 uppercase mb-2">Values Title</label>
+                         <input
+                           type="text"
+                           value={formData.valuesTitle || ''}
+                           onChange={(e) => setFormData({ ...formData, valuesTitle: e.target.value })}
+                           className="w-full px-4 py-3 bg-[#1e253a] border border-[#3f4d7f]/30 rounded-xl text-white text-sm focus:border-accent-500/50 outline-none transition-all"
+                         />
+                       </div>
+                       <div>
+                         <label className="block text-xs font-bold text-slate-500 uppercase mb-2">Values Statement</label>
+                         <textarea
+                           value={formData.valuesContent || ''}
+                           onChange={(e) => setFormData({ ...formData, valuesContent: e.target.value })}
                            className="w-full px-4 py-3 bg-[#1e253a] border border-[#3f4d7f]/30 rounded-xl text-white text-sm h-32 resize-none focus:border-accent-500/50 outline-none transition-all"
                          />
                        </div>

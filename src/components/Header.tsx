@@ -46,9 +46,16 @@ const Header = () => {
     { name: 'Contact', id: 'contact' },
   ];
 
+  const isHomePage = location.pathname === '/';
+  const headerBg = isHomePage
+    ? isScrolled
+      ? 'bg-black/80 backdrop-blur-md border-white/10'
+      : 'bg-white/30 backdrop-blur-sm border-white/20'
+    : 'bg-black/90 backdrop-blur-md border-white/10';
+
   return (
     <motion.header 
-      className="fixed top-0 w-full z-50 bg-white/30 backdrop-blur-sm border-b border-white/20"
+      className={`fixed top-0 w-full z-50 border-b transition-all duration-300 ${headerBg}`}
       initial={{ y: -100}}
       animate={{ y: 0 }}
       transition={{ duration: 0.5 }}

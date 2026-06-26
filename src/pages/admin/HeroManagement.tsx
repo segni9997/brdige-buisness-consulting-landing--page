@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Home, Edit, X, Check, Eye as EyeIcon, Image, Plus, Trash2, TrendingUp } from 'lucide-react';
 import { useGetHeroQuery, useUpdateHeroMutation, type THeroSection } from '../../store/api';
+import HeroCarouselManager from '../../components/admin/HeroCarouselManager';
 
 export default function HeroManagement() {
   const { data: heroData } = useGetHeroQuery();
@@ -293,6 +294,9 @@ export default function HeroManagement() {
           </div>
         </div>
       )}
+
+      {/* Render Carousel Manager */}
+      <HeroCarouselManager />
     </div>
   );
 }

@@ -93,6 +93,23 @@ const About = () => {
                   </p>
                 </div>
               </motion.div>
+
+              <motion.div 
+                className="flex items-start space-x-3 md:space-x-4 group"
+                initial={{ opacity: 0, x: -30 }}
+                animate={isInView ? { opacity: 1, x: 0 } : {}}
+                transition={{ delay: 0.5 }}
+              >
+                <div className="flex-shrink-0 w-8 md:w-10 h-8 md:h-10 bg-gradient-to-r from-slate-600 to-slate-500 rounded-xl flex items-center justify-center mt-0.5 md:mt-1 group-hover:scale-110 transition-transform duration-300">
+                  <div className="w-3 md:w-4 h-3 md:h-4 bg-white rounded-full"></div>
+                </div>
+                <div>
+                  <h3 className="font-semibold text-white/80 mb-1 md:mb-2 group-hover:text-white/70 transition-colors duration-300 text-sm md:text-base" style={{ fontFamily: 'var(--font-heading)' }}>{about?.valuesTitle}</h3>
+                  <p className="text-white/70 leading-relaxed text-sm md:text-base">
+                    {about?.valuesContent}
+                  </p>
+                </div>
+              </motion.div>
             </div>
           </motion.div>
           

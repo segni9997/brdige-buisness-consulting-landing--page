@@ -117,16 +117,16 @@ const Projects = () => {
                   {project.results.map((result, resultIndex) => (
                     <motion.div
                       key={resultIndex}
-                      className="text-center p-2 md:p-4 bg-white/30 rounded-xl border border-white/30 hover:bg-white/50 transition-all duration-300"
+                      className="text-center p-2 md:p-4 bg-black/40 rounded-xl border border-white/10 hover:bg-black/60 transition-all duration-300 shadow-inner"
                       whileHover={{ scale: 1.05 }}
                     >
                       <div className="text-white mb-1 md:mb-2 flex justify-center">
                         {result.icon}
                       </div>
-                      <div className={`text-lg md:text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r ${project.gradient} mb-0 md:mb-1`} style={{ fontFamily: 'var(--font-heading)' }}>
+                      <div className="text-lg md:text-2xl font-bold text-white mb-0 md:mb-1" style={{ fontFamily: 'var(--font-heading)' }}>
                         {result.value}
                       </div>
-                      <div className="text-xs text-white/60">{result.metric}</div>
+                      <div className="text-xs md:text-sm text-white/80 font-medium">{result.metric}</div>
                     </motion.div>
                   ))}
                 </div>

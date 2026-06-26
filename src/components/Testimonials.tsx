@@ -99,7 +99,7 @@ const Testimonials = () => {
                 
                 <div className="flex items-center">
                   <motion.img
-                    src={testimonial.imageUrl}
+                    src={testimonial.imageUrl || `https://ui-avatars.com/api/?name=${encodeURIComponent(testimonial.name)}&background=random`}
                     alt={testimonial.name}
                     className="w-12 h-12 md:w-14 md:h-14 rounded-xl mr-3 md:mr-4 border-2 border-white/20 group-hover:border-accent-400"
                     initial={{ scale: 0 }}

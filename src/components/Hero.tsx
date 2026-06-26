@@ -1,12 +1,28 @@
-import { useRef } from 'react';
-import { motion, useInView } from 'framer-motion';
+import { useRef, useState, useEffect } from 'react';
+import { motion, useInView, AnimatePresence } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
-import { useGetHeroQuery } from '../store/api';
+import { useGetHeroQuery, useGetCarouselImagesQuery } from '../store/api';
 
 const Hero = () => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true });
   const { data: hero } = useGetHeroQuery();
+  const { data: carouselImages } = useGetCarouselImagesQuery();
+
+  const [currentSlide, setCurrentSlide] = useState(0);
+
+  const activeImages = carouselImages?.filter(img => img.isActive)?.sort((a, b) => a.order - b.order) || [];
+  
+  // Default to hero background if no active carousel images
+  const backgroundUrl = activeImages.length > 0 ? activeImages[currentSlide].imageUrl : hero?.backgroundImageUrl;
+
+  useEffect(() => {
+    if (activeImages.length <= 1) return;
+    const interval = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % activeImages.length);
+    }, 5000);
+    return () => clearInterval(interval);
+  }, [activeImages.length]);
 
   const getStatsArray = (stats: any) => {
     if (Array.isArray(stats)) return stats;
@@ -49,12 +65,17 @@ const Hero = () => {
 
   return (
     <section id="home" className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      <div 
-        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-        style={{
-          backgroundImage: `url(${hero?.backgroundImageUrl})`
-        }}
-      ></div>
+      <AnimatePresence mode="popLayout">
+        <motion.div 
+          key={backgroundUrl}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 1.5, ease: "easeInOut" }}
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+          style={{ backgroundImage: `url(${backgroundUrl})` }}
+        />
+      </AnimatePresence>
       <div className="absolute inset-0 bg-gradient-to-br from-black/80 via-black/60 to-black/40"></div>
       <div className="absolute inset-0 bg-black/30"></div>
       

@@ -10,7 +10,7 @@ const CaseStudyDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const studyRef = useRef(null);
-  const isInView = useInView(studyRef, { once: true, margin: "-100px" });
+  const isInView = useInView(studyRef, { once: true, margin: "0px" });
 
   const { data: story, isLoading } = useGetSuccessStoryQuery(Number(id));
 
@@ -140,7 +140,7 @@ return (
               >
                 {result.icon}
               </motion.div>
-              <div className={`text-3xl md:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r ${caseStudy.gradient} mb-2`} style={{ fontFamily: 'var(--font-heading)' }}>
+              <div className="text-3xl md:text-4xl font-bold text-white mb-2" style={{ fontFamily: 'var(--font-heading)' }}>
                 {result.value}
               </div>
               <div className="text-white/70 font-medium mb-1 text-sm md:text-base">{result.metric}</div>

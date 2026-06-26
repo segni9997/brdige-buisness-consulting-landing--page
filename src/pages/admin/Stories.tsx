@@ -1,16 +1,8 @@
 import { useState } from 'react';
 import { BookOpen, Plus, Search, Trash2, Edit, Eye, EyeOff, Calendar, User, X, Check, Eye as EyeIcon } from 'lucide-react';
-import { useGetStoriesQuery, useCreateStoryMutation, useUpdateStoryMutation, useDeleteStoryMutation, type TBlog } from '../../store/api';
+import { useGetStoriesQuery, useCreateStoryMutation, useUpdateStoryMutation, useDeleteStoryMutation, useUploadImageMutation, type TBlog } from '../../store/api';
 
 const categories = ['Business', 'Finance', 'Analysis', 'Startup', 'Technology', 'Marketing'];
-
-const defaultImages = [
-  'https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=400',
-  'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=400',
-  'https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=400',
-  'https://images.unsplash.com/photo-1504868584819-f8e8b4b6d7e3?w=400',
-  'https://images.unsplash.com/photo-1553484771-371a605b060b?w=400',
-];
 
 export default function Stories() {
   const { data: storiesData = [] } = useGetStoriesQuery();
@@ -22,6 +14,8 @@ export default function Stories() {
   const [searchTerm, setSearchTerm] = useState('');
   const [filterStatus, setFilterStatus] = useState<string>('all');
   const [previewStory, setPreviewStory] = useState<TBlog | null>(null);
+  const [uploadImage] = useUploadImageMutation();
+  const [isUploading, setIsUploading] = useState(false);
 
   const [formData, setFormData] = useState<Partial<TBlog>>({
     id: 0,
@@ -61,7 +55,6 @@ export default function Stories() {
     if (modalMode === 'add') {
       const newStory = {
         ...formData,
-        imageUrl: formData.imageUrl || defaultImages[Math.floor(Math.random() * defaultImages.length)],
       };
       await createStory(newStory);
     } else {
@@ -76,6 +69,24 @@ export default function Stories() {
 
   const handleStatusChange = async (story: TBlog, status: TBlog['status']) => {
     await updateStory({ ...story, status });
+  };
+
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.files || e.target.files.length === 0) return;
+    const file = e.target.files[0];
+    const data = new FormData();
+    data.append('file', file);
+    data.append('folder', 'stories');
+    
+    setIsUploading(true);
+    try {
+      const res = await uploadImage(data).unwrap();
+      setFormData(prev => ({ ...prev, imageUrl: res.url }));
+    } catch (err) {
+      console.error('Upload failed', err);
+    } finally {
+      setIsUploading(false);
+    }
   };
 
   const filteredStories = storiesData.filter(s => {
@@ -284,14 +295,21 @@ export default function Stories() {
                 </select>
               </div>
               <div>
-                <label className="block text-sm font-medium text-slate-300 mb-2">Image URL</label>
-                <input
-                  type="url"
-                  value={formData.imageUrl}
-                  onChange={(e) => setFormData({ ...formData, imageUrl: e.target.value })}
-                  className="w-full px-3 sm:px-4 py-2.5 bg-[#191f2f]/50 border border-[#3f4d7f]/30 rounded-xl text-white text-sm"
-                  placeholder="https://..."
-                />
+                <label className="block text-sm font-medium text-slate-300 mb-2">Image Upload</label>
+                <div className="flex gap-2 items-center">
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleImageUpload}
+                    className="w-full px-3 sm:px-4 py-2.5 bg-[#191f2f]/50 border border-[#3f4d7f]/30 rounded-xl text-white text-sm focus:border-accent-500/50 outline-none transition-all file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-accent-500/20 file:text-accent-400 hover:file:bg-accent-500/30"
+                  />
+                  {isUploading && <span className="text-sm text-accent-400 flex items-center shrink-0">Uploading...</span>}
+                </div>
+                {formData.imageUrl && (
+                  <div className="mt-4">
+                    <img src={formData.imageUrl} alt="Preview" className="h-20 object-cover rounded-lg border border-[#3f4d7f]/30" />
+                  </div>
+                )}
               </div>
               <div>
                 <label className="block text-sm font-medium text-slate-300 mb-2">Expert Name</label>
