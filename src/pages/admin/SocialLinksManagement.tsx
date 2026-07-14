@@ -5,7 +5,7 @@ import {
   useCreateSocialLinkMutation,
   useUpdateSocialLinkMutation,
   useDeleteSocialLinkMutation,
-  TSocialLink,
+  type TSocialLink,
 } from '../../store/api';
 
 const ICON_OPTIONS = [

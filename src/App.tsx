@@ -16,15 +16,25 @@ function App() {
   const location = useLocation();
 
   useEffect(() => {
-    document.title = 'Bridge Consulting Services | Strategic Solutions for Growth';
-    
+    document.title = 'Bridge Management Consultancy | Project Proposal, Feasibility Study, EIA, ESIA, Training, Asset Evaluation, Organizational Structure & Environmental Audit';
+
+    // Meta description
     let metaDesc = document.querySelector('meta[name="description"]');
     if (!metaDesc) {
       metaDesc = document.createElement('meta');
       metaDesc.setAttribute('name', 'description');
       document.head.appendChild(metaDesc);
     }
-    metaDesc.setAttribute('content', 'Bridge Consulting Services provides expert strategic consulting services to help businesses achieve sustainable growth and operational excellence.');
+    metaDesc.setAttribute('content', 'Expert consulting: EIA, ESIA, Feasibility Study, Project Proposal, Asset Evaluation, Organizational Structure & Environmental Audit. Serving Ethiopia & East Africa.');
+
+    // Meta keywords
+    let metaKeywords = document.querySelector('meta[name="keywords"]');
+    if (!metaKeywords) {
+      metaKeywords = document.createElement('meta');
+      metaKeywords.setAttribute('name', 'keywords');
+      document.head.appendChild(metaKeywords);
+    }
+    metaKeywords.setAttribute('content', 'Bridge Consulting, Project Proposal, Feasibility Study, Environmental Impact Assessment, EIA, Environmental and Social Impact Assessment, ESIA, Training, Asset Evaluation, Organizational Structure, Environmental Audit Report, management consulting Ethiopia, Addis Ababa, East Africa');
   }, []);
 
   // Scroll to hash section after navigation (e.g. from footer links like /#services)

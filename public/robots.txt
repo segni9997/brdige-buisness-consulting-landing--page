@@ -1,0 +1,8 @@
+# https://www.robotstxt.org/robotstxt.html
+
+User-agent: *
+Disallow: /admin/login
+Disallow: /admin/*
+Disallow: /api
+Disallow: /api/*
+Sitemap: https://bridge-consulting.org/sitemap.xml

@@ -55,9 +55,10 @@ const About = () => {
               About Bridge
             </h2>
             
-            <p className="text-base md:text-lg text-white/70 mb-6 md:mb-8 leading-relaxed">
-              {about?.description}
-            </p>
+            <div 
+              className="text-base md:text-lg text-white/70 mb-6 md:mb-8 leading-relaxed [&>ul]:list-disc [&>ul]:pl-5 [&>ol]:list-decimal [&>ol]:pl-5 space-y-2"
+              dangerouslySetInnerHTML={{ __html: about?.description || '' }}
+            />
             
             <div className="space-y-6 md:space-y-8">
               <motion.div 
@@ -71,9 +72,10 @@ const About = () => {
                 </div>
                 <div>
                   <h3 className="font-semibold text-white/80 mb-1 md:mb-2 group-hover:text-accent-600 transition-colors duration-300 text-sm md:text-base" style={{ fontFamily: 'var(--font-heading)' }}>{about?.missionTitle}</h3>
-                  <p className="text-white/70 leading-relaxed text-sm md:text-base">
-                    {about?.missionContent}
-                  </p>
+                  <div 
+                    className="text-white/70 leading-relaxed text-sm md:text-base [&>ul]:list-disc [&>ul]:pl-5 [&>ol]:list-decimal [&>ol]:pl-5 space-y-2"
+                    dangerouslySetInnerHTML={{ __html: about?.missionContent || '' }}
+                  />
                 </div>
               </motion.div>
               
@@ -88,9 +90,10 @@ const About = () => {
                 </div>
                 <div>
                   <h3 className="font-semibold text-white/80 mb-1 md:mb-2 group-hover:text-white/70 transition-colors duration-300 text-sm md:text-base" style={{ fontFamily: 'var(--font-heading)' }}>{about?.visionTitle}</h3>
-                  <p className="text-white/70 leading-relaxed text-sm md:text-base">
-                    {about?.visionContent}
-                  </p>
+                  <div 
+                    className="text-white/70 leading-relaxed text-sm md:text-base [&>ul]:list-disc [&>ul]:pl-5 [&>ol]:list-decimal [&>ol]:pl-5 space-y-2"
+                    dangerouslySetInnerHTML={{ __html: about?.visionContent || '' }}
+                  />
                 </div>
               </motion.div>
 
@@ -105,9 +108,10 @@ const About = () => {
                 </div>
                 <div>
                   <h3 className="font-semibold text-white/80 mb-1 md:mb-2 group-hover:text-white/70 transition-colors duration-300 text-sm md:text-base" style={{ fontFamily: 'var(--font-heading)' }}>{about?.valuesTitle}</h3>
-                  <p className="text-white/70 leading-relaxed text-sm md:text-base">
-                    {about?.valuesContent}
-                  </p>
+                  <div 
+                    className="text-white/70 leading-relaxed text-sm md:text-base [&>ul]:list-disc [&>ul]:pl-5 [&>ol]:list-decimal [&>ol]:pl-5 space-y-2"
+                    dangerouslySetInnerHTML={{ __html: about?.valuesContent || '' }}
+                  />
                 </div>
               </motion.div>
             </div>
@@ -180,9 +184,10 @@ const About = () => {
               <h3 className="text-2xl md:text-3xl font-bold text-white mb-3 md:mb-4" style={{ fontFamily: 'var(--font-heading)' }}>
                 {about?.ctaTitle}
               </h3>
-              <p className="text-lg md:text-xl text-white/80 mb-6 md:mb-8 max-w-2xl mx-auto">
-                {about?.ctaContent}
-              </p>
+              <div 
+                className="text-lg md:text-xl text-white/80 mb-6 md:mb-8 max-w-2xl mx-auto [&>ul]:list-disc [&>ul]:pl-5 [&>ol]:list-decimal [&>ol]:pl-5 space-y-2 text-left"
+                dangerouslySetInnerHTML={{ __html: about?.ctaContent || '' }}
+              />
               <motion.button 
                 className="bg-accent-500 text-white px-6 md:px-8 py-3 md:py-4 rounded-lg font-semibold text-base md:text-lg hover:bg-accent-600 transition-all duration-300"
                 whileHover={{ scale: 1.05 }}

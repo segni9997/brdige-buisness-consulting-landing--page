@@ -177,7 +177,8 @@ export interface TSocialLink {
 export const api = createApi({
   reducerPath: 'api',
   baseQuery: fetchBaseQuery({ 
-    baseUrl: 'http://127.0.0.1:8000/api/',
+    baseUrl: 'https://backend.bridge-consulting.org/api/',
+    // baseUrl: 'http://localhost:8000/api/',
     prepareHeaders: (headers) => {
       const token = localStorage.getItem('access_token');
       if (token) {

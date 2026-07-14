@@ -102,10 +102,6 @@ export default function AdminLogin() {
               )}
             </button>
           </form>
-          
-          <p className="text-center text-slate-500 text-xs sm:text-sm mt-4 sm:mt-6">
-            Demo: se / se1234
-          </p>
         </div>
       </div>
     </div>

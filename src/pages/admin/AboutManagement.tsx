@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { X, Check, Eye as EyeIcon, Edit, Award, Target, Compass, Rocket } from 'lucide-react';
 import { useGetAboutQuery, useUpdateAboutMutation, useUploadImageMutation, type TAboutUs } from '../../store/api';
-
+import Editor from 'react-simple-wysiwyg';
 export default function AboutManagement() {
   const { data: aboutData } = useGetAboutQuery();
   const [updateAboutMutation] = useUpdateAboutMutation();
@@ -9,6 +9,8 @@ export default function AboutManagement() {
   const [showModal, setShowModal] = useState(false);
   const [formData, setFormData] = useState<TAboutUs | null>(null);
   const [isUploading, setIsUploading] = useState(false);
+
+
 
   useEffect(() => {
     if (aboutData) setFormData(JSON.parse(JSON.stringify(aboutData)));
@@ -119,17 +121,17 @@ export default function AboutManagement() {
             <div>
               <span className="text-accent-400 font-bold uppercase tracking-widest text-xs">{aboutData.subtitle}</span>
               <h3 className="text-3xl font-bold text-white mt-2 leading-tight">{aboutData.ctaTitle}</h3>
-              <p className="text-slate-300 mt-4 leading-relaxed">{aboutData.description}</p>
+              <div className="text-slate-300 mt-4 leading-relaxed [&>ul]:list-disc [&>ul]:pl-5 [&>ol]:list-decimal [&>ol]:pl-5 space-y-2" dangerouslySetInnerHTML={{ __html: aboutData.description || '' }} />
             </div>
             
             <div className="grid grid-cols-2 gap-8">
                <div className="bg-white/5 p-6 rounded-2xl border border-white/10">
                  <h4 className="text-white font-bold mb-2 flex items-center gap-2"><Target className="w-4 h-4 text-accent-400" /> {aboutData.missionTitle}</h4>
-                 <p className="text-slate-400 text-sm leading-relaxed">{aboutData.missionContent}</p>
+                 <div className="text-slate-400 text-sm leading-relaxed [&>ul]:list-disc [&>ul]:pl-5 [&>ol]:list-decimal [&>ol]:pl-5 space-y-2" dangerouslySetInnerHTML={{ __html: aboutData.missionContent || '' }} />
                </div>
                <div className="bg-white/5 p-6 rounded-2xl border border-white/10">
                  <h4 className="text-white font-bold mb-2 flex items-center gap-2"><Compass className="w-4 h-4 text-primary-400" /> {aboutData.visionTitle}</h4>
-                 <p className="text-slate-400 text-sm leading-relaxed">{aboutData.visionContent}</p>
+                 <div className="text-slate-400 text-sm leading-relaxed [&>ul]:list-disc [&>ul]:pl-5 [&>ol]:list-decimal [&>ol]:pl-5 space-y-2" dangerouslySetInnerHTML={{ __html: aboutData.visionContent || '' }} />
                </div>
             </div>
           </div>
@@ -145,7 +147,7 @@ export default function AboutManagement() {
             
             <div className="bg-gradient-to-br from-accent-500 to-accent-700 rounded-3xl p-8 text-white shadow-xl shadow-accent-500/20">
                <h4 className="text-xl font-bold mb-2">{aboutData.ctaTitle}</h4>
-               <p className="text-white/80 leading-relaxed mb-6">{aboutData.ctaContent}</p>
+               <div className="text-white/80 leading-relaxed mb-6 [&>ul]:list-disc [&>ul]:pl-5 [&>ol]:list-decimal [&>ol]:pl-5 space-y-2" dangerouslySetInnerHTML={{ __html: aboutData.ctaContent || '' }} />
                <button className="px-6 py-2 bg-white text-accent-600 font-bold rounded-xl text-sm">Join the Journey</button>
             </div>
           </div>
@@ -266,11 +268,12 @@ export default function AboutManagement() {
                        </div>
                        <div>
                          <label className="block text-xs font-bold text-slate-500 uppercase mb-2">Mission Statement</label>
-                         <textarea
-                           value={formData.missionContent}
-                           onChange={(e) => setFormData({ ...formData, missionContent: e.target.value })}
-                           className="w-full px-4 py-3 bg-[#1e253a] border border-[#3f4d7f]/30 rounded-xl text-white text-sm h-32 resize-none focus:border-accent-500/50 outline-none transition-all"
-                         />
+                         <div className="border border-[#3f4d7f]/30 rounded-xl overflow-hidden bg-white text-slate-800 mb-10">
+                           <Editor
+                             value={formData.missionContent}
+                             onChange={(e) => setFormData({ ...formData, missionContent: e.target.value })}
+                           />
+                         </div>
                        </div>
                     </div>
 
@@ -286,11 +289,12 @@ export default function AboutManagement() {
                        </div>
                        <div>
                          <label className="block text-xs font-bold text-slate-500 uppercase mb-2">Vision Statement</label>
-                         <textarea
-                           value={formData.visionContent}
-                           onChange={(e) => setFormData({ ...formData, visionContent: e.target.value })}
-                           className="w-full px-4 py-3 bg-[#1e253a] border border-[#3f4d7f]/30 rounded-xl text-white text-sm h-32 resize-none focus:border-accent-500/50 outline-none transition-all"
-                         />
+                         <div className="border border-[#3f4d7f]/30 rounded-xl overflow-hidden bg-white text-slate-800 mb-10">
+                           <Editor
+                             value={formData.visionContent}
+                             onChange={(e) => setFormData({ ...formData, visionContent: e.target.value })}
+                           />
+                         </div>
                        </div>
                     </div>
 
@@ -306,11 +310,12 @@ export default function AboutManagement() {
                        </div>
                        <div>
                          <label className="block text-xs font-bold text-slate-500 uppercase mb-2">Values Statement</label>
-                         <textarea
-                           value={formData.valuesContent || ''}
-                           onChange={(e) => setFormData({ ...formData, valuesContent: e.target.value })}
-                           className="w-full px-4 py-3 bg-[#1e253a] border border-[#3f4d7f]/30 rounded-xl text-white text-sm h-32 resize-none focus:border-accent-500/50 outline-none transition-all"
-                         />
+                         <div className="border border-[#3f4d7f]/30 rounded-xl overflow-hidden bg-white text-slate-800 mb-10">
+                           <Editor
+                             value={formData.valuesContent || ''}
+                             onChange={(e) => setFormData({ ...formData, valuesContent: e.target.value })}
+                           />
+                         </div>
                        </div>
                     </div>
                  </div>

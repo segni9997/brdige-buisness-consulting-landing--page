@@ -22,7 +22,7 @@ const Footer = () => {
   return (
     <footer className="bg-black/80 text-white" ref={ref}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 lg:gap-10">
           <motion.div 
             className="lg:col-span-1"
             initial={{ opacity: 0, y: 20 }}
@@ -79,16 +79,19 @@ const Footer = () => {
             animate={isInView ? { opacity: 1, y: 0 } : { opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.1 }}
           >
-            <h3 className="text-base md:text-lg font-semibold mb-4 md:mb-6" style={{ fontFamily: 'var(--font-heading)' }}>Services</h3>
+            <h3 className="text-base md:text-lg font-semibold mb-4 md:mb-6" style={{ fontFamily: 'var(--font-heading)' }}>Our Services</h3>
             <ul className="space-y-2 md:space-y-3 text-white/60 text-sm md:text-base">
               {[
-                { label: 'Our Services', href: '/#services' },
-                { label: 'How It Works', href: '/#how-it-works' },
-                { label: 'Success Stories', href: '/case-studies' },
-                { label: 'Projects', href: '/#projects' },
-                { label: 'Contact Us', href: '/#contact' },
+                { label: 'Project Proposal', href: '/#services' },
+                { label: 'Feasibility Study', href: '/#services' },
+                { label: 'Environmental Impact Assessment (EIA)', href: '/#services' },
+                { label: 'Environmental & Social Impact Assessment', href: '/#services' },
+                { label: 'Training', href: '/#services' },
+                { label: 'Asset Evaluation', href: '/#services' },
+                { label: 'Organizational Structure', href: '/#services' },
+                { label: 'Environmental Audit Report', href: '/#services' },
               ].map((item, index) => (
-                <motion.li 
+                <motion.li
                   key={index}
                   whileHover={{ x: 5 }}
                 >
@@ -97,7 +100,7 @@ const Footer = () => {
               ))}
             </ul>
           </motion.div>
-          
+
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={isInView ? { opacity: 1, y: 0 } : { opacity: 1, y: 0 }}
@@ -108,11 +111,12 @@ const Footer = () => {
               {[
                 { label: 'About Us', href: '/#about' },
                 { label: 'Case Studies', href: '/case-studies' },
-                { label: 'Testimonials', href: '/#testimonials' },
+                { label: 'Success Stories', href: '/case-studies' },
+                { label: 'How It Works', href: '/#how-it-works' },
                 { label: 'Contact', href: '/#contact' },
-                { label: 'Admin Panel', href: '/admin/login' },
+           
               ].map((item, index) => (
-                <motion.li 
+                <motion.li
                   key={index}
                   whileHover={{ x: 5 }}
                 >
@@ -121,6 +125,7 @@ const Footer = () => {
               ))}
             </ul>
           </motion.div>
+
           
           <motion.div
             initial={{ opacity: 0, y: 20 }}

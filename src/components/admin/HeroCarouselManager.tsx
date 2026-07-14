@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useGetCarouselImagesQuery, useCreateCarouselImageMutation, useUpdateCarouselImageMutation, useDeleteCarouselImageMutation, useUploadImageMutation, type TCarouselImage } from '../../store/api';
-import { Plus, Edit, Trash2, Check, X, Image as ImageIcon } from 'lucide-react';
+import { Plus, Edit, Trash2, Check, X } from 'lucide-react';
 
 export default function HeroCarouselManager() {
   const { data: images = [], isLoading } = useGetCarouselImagesQuery();
